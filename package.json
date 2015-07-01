@@ -31,5 +31,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/angular-ui/ui-mask.git"
-  }
+  },
+  "keywords": [
+    "angular",
+    "angular-ui",
+    "mask"
+  ]
 }
