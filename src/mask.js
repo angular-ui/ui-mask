@@ -147,7 +147,7 @@ angular.module('ui.mask', [])
                             }
 
                             function initializeElement() {
-                                value = oldValueUnmasked = unmaskValue(controller.$viewValue || '');
+                                value = oldValueUnmasked = unmaskValue(controller.$modelValue || '');
                                 valueMasked = oldValue = maskValue(value);
                                 isValid = validateValue(value);
                                 var viewValue = isValid && value.length ? valueMasked : '';
