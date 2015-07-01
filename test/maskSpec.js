@@ -37,9 +37,9 @@ describe("uiMask", function () {
       var input = compileElement(inputHtml);
       scope.$apply("x = 'abc123'");
       scope.$apply("mask = '(9) * A'");
-      expect(input.hasClass("ng-pristine ng-valid")).toBeTruthy();
+      expect(input.hasClass("ng-pristine")).toBeTruthy();
       scope.$apply("mask = '(9) * A 9'");
-      expect(input.hasClass("ng-pristine ng-valid")).toBeTruthy();
+      expect(input.hasClass("ng-pristine")).toBeTruthy();
     });
 
     it("should not change the model value", function() {
@@ -130,21 +130,21 @@ describe("uiMask", function () {
       expect(input.data("$ngModelController").$error.required).toBe(true);
       input.val("abc123").triggerHandler("input");
       expect(scope.x).toBe("ab1");
-      expect(input.data("$ngModelController").$error.required).toBe(false);
+      expect(input.data("$ngModelController").$error.required).toBeUndefined();
 
       input = compileElement("<input name='input' ng-model='x' ui-mask='{{mask}}' ng-required='required'>");
       expect(input.data("$ngModelController").$error.required).toBeUndefined();
       input.triggerHandler("input");
       expect(input.data("$ngModelController").$error.required).toBe(true);
       scope.$apply("required = false");
-      expect(input.data("$ngModelController").$error.required).toBe(false);
+      expect(input.data("$ngModelController").$error.required).toBeUndefined();
       input.triggerHandler("input");
-      expect(input.data("$ngModelController").$error.required).toBe(false);
+      expect(input.data("$ngModelController").$error.required).toBeUndefined();
       input.triggerHandler("focus");
       input.triggerHandler("blur");
-      expect(input.data("$ngModelController").$error.required).toBe(false);
+      expect(input.data("$ngModelController").$error.required).toBeUndefined();
       input.val("").triggerHandler("input");
-      expect(input.data("$ngModelController").$error.required).toBe(false);
+      expect(input.data("$ngModelController").$error.required).toBeUndefined();
     });
   });
 
