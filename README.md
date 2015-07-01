@@ -1,7 +1,6 @@
 # ui-mask [![Build Status](https://travis-ci.org/angular-ui/ui-mask.svg?branch=master)](https://travis-ci.org/angular-ui/ui-mask)
 
-
-
+Apply a mask on an input field so the user can only type pre-determined pattern.
 
 ## Requirements
 
