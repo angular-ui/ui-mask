@@ -167,6 +167,13 @@ describe("uiMask", function () {
       expect(scope.test.input.$viewValue).toBe('12-3');
       expect(scope.x).toBe('123');
     });
+
+    it("should set validity when setting model and mask on same $digest", function() {
+      compileElement(formHtml);
+      scope.$apply(" x='1234'; mask = '99-99';");
+      scope.$apply(" x='123';  mask = '99-9';");
+      expect(scope.test.input.$valid).toBe(true);
+    });
   });
 
   describe("default mask definitions", function () {

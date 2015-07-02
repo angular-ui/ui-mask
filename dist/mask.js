@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.0.0 - 2015-07-01T23:46:24.983Z
+ * Version: 1.0.0 - 2015-07-02T01:05:07.443Z
  * License: MIT
  */
 
@@ -167,6 +167,7 @@ angular.module('ui.mask', [])
                                 iElement.attr('placeholder', maskPlaceholder);
                                 iElement.val(viewValue);
                                 controller.$viewValue = viewValue;
+                                controller.$setValidity('mask', isValid);
                                 // Not using $setViewValue so we don't clobber the model value and dirty the form
                                 // without any kind of user interaction.
                             }
