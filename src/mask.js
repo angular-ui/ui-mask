@@ -147,7 +147,7 @@ angular.module('ui.mask', [])
                             }
 
                             function initializeElement() {
-                                value = oldValueUnmasked = unmaskValue(controller.$viewValue || '');
+                                value = oldValueUnmasked = unmaskValue(controller.$modelValue || '');
                                 valueMasked = oldValue = maskValue(value);
                                 isValid = validateValue(value);
                                 var viewValue = isValid && value.length ? valueMasked : '';
@@ -157,6 +157,7 @@ angular.module('ui.mask', [])
                                 iElement.attr('placeholder', maskPlaceholder);
                                 iElement.val(viewValue);
                                 controller.$viewValue = viewValue;
+                                controller.$setValidity('mask', isValid);
                                 // Not using $setViewValue so we don't clobber the model value and dirty the form
                                 // without any kind of user interaction.
                             }
