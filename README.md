@@ -4,7 +4,6 @@ Apply a mask on an input field so the user can only type pre-determined pattern.
 
 ## Requirements
 
-- jQuery
 - AngularJS
 
 ## Usage
@@ -19,7 +18,6 @@ bower install angular-ui-mask
 Load the script files in your application:
 
 ```html
-<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
 <script type="text/javascript" src="bower_components/angular/angular.js"></script>
 <script type="text/javascript" src="bower_components/angular-ui-mask/ui-mask.js"></script>
 ```

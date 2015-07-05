@@ -11,6 +11,9 @@ angular.module('ui.mask', [])
             clearOnBlur: true
         })
         .directive('uiMask', ['uiMaskConfig', '$parse', function(maskConfig, $parse) {
+                function isFocused (elem) {
+                  return elem === document.activeElement && (!document.hasFocus || document.hasFocus()) && !!(elem.type || elem.href || ~elem.tabIndex);
+                }
 
                 return {
                     priority: 100,
@@ -438,7 +441,7 @@ angular.module('ui.mask', [])
                                 if (input.selectionStart !== undefined) {
                                     return input.selectionStart;
                                 } else if (document.selection) {
-                                    if (iElement.is(':focus')) {
+                                    if (isFocused(iElement[0])) {
                                         // Curse you IE
                                         input.focus();
                                         var selection = document.selection.createRange();
@@ -456,7 +459,7 @@ angular.module('ui.mask', [])
                                     return; // Input's hidden
                                 }
                                 if (input.setSelectionRange) {
-                                    if (iElement.is(':focus')) {
+                                    if (isFocused(iElement[0])) {
                                         input.focus();
                                         input.setSelectionRange(pos, pos);
                                     }
