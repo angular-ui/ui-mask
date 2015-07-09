@@ -46,7 +46,12 @@
 
                             <div class="col-sm-9">
                                 <input class="form-control" id="definition" ng-model="y" style="vertical-align: top;">
-                                <span class="help-inline"><code>A</code> Any letter.<br><code>9</code> Any number.<br><code>*</code> Any letter or number.</span>
+                                <span class="help-inline">
+                                    <code>A</code> Any letter.<br>
+                                    <code>9</code> Any number.<br>
+                                    <code>*</code> Any letter or number.<br>
+                                    <code>?</code> Make any part of the mask optional.
+                                </span>
                             </div>
                         </div>
 
@@ -62,6 +67,9 @@
                                 </p>
                                 <p>
                                     <button class="btn btn-default" ng-click="y = '(999) 999-9999 ext. 999'">Set to (999) 999-9999 ext. 999</button>
+                                </p>
+                                <p>
+                                    <button class="btn btn-default" ng-click="y = '(999) 999-9999 ext. ?9?9?9'">Set to (999) 999-9999 ext. ?9?9?9</button>
                                 </p>
                                 <p>
                                     <button class="btn btn-default" ng-click="y = '(**: AAA-999)'">Set to (**: AAA-999)</button>
