@@ -338,7 +338,6 @@ angular.module('ui.mask', [])
                                         valMasked,
                                         valUnmasked = unmaskValue(val),
                                         valUnmaskedOld = oldValueUnmasked,
-                                        valAltered = false,
                                         caretPos = getCaretPosition(this) || 0,
                                         caretPosOld = oldCaretPosition || 0,
                                         caretPosDelta = caretPos - caretPosOld,
@@ -384,7 +383,6 @@ angular.module('ui.mask', [])
                                     var charIndex = maskCaretMap.indexOf(caretPos);
                                     // Strip out non-mask character that user would have deleted if mask hadn't been in the way.
                                     valUnmasked = valUnmasked.substring(0, charIndex) + valUnmasked.substring(charIndex + 1);
-                                    valAltered = true;
                                 }
 
                                 // Update values
@@ -393,12 +391,7 @@ angular.module('ui.mask', [])
                                 oldValue = valMasked;
                                 oldValueUnmasked = valUnmasked;
                                 iElement.val(valMasked);
-                                if (valAltered) {
-                                    // We've altered the raw value after it's been $digest'ed, we need to $apply the new value.
-                                    scope.$apply(function() {
-                                        controller.$setViewValue(valUnmasked);
-                                    });
-                                }
+                                controller.$setViewValue(valUnmasked);
 
                                 // Caret Repositioning
                                 // ===================

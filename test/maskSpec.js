@@ -85,6 +85,16 @@ describe("uiMask", function () {
       expect(scope.test.input.$viewValue).toBe("(a) _ _");
     });
 
+    it("should maintain $viewValue consistent with input value", function() {
+      var form  = compileElement(formHtml);
+      var input = form.find("input");
+      scope.$apply("x = ''");
+      scope.$apply("mask = '99 9'");
+      input.val("3333").triggerHandler("input");
+      input.val("3333").triggerHandler("input"); // It used to has a bug when pressing a key repeatedly
+      expect(scope.test.input.$viewValue).toBe("33 3");
+    });
+
     it("should parse unmasked value to model", function() {
       var form  = compileElement(formHtml);
       var input = form.find("input");
@@ -249,7 +259,6 @@ describe("uiMask", function () {
       scope.$apply("myDate = ''");
       expect(input.attr("placeholder")).toBe("DD/MM/YYYY HH:mm");
     });
-
   });
 
   describe("configuration", function () {
