@@ -172,6 +172,7 @@ angular.module('ui.mask', [])
                                 iElement.bind('blur', blurHandler);
                                 iElement.bind('mousedown mouseup', mouseDownUpHandler);
                                 iElement.bind('input keyup click focus', eventHandler);
+                                iElement.bind('paste', onPasteHandler);
                                 eventsBound = true;
                             }
 
@@ -186,6 +187,7 @@ angular.module('ui.mask', [])
                                 iElement.unbind('keyup', eventHandler);
                                 iElement.unbind('click', eventHandler);
                                 iElement.unbind('focus', eventHandler);
+                                iElement.unbind('paste', onPasteHandler);
                                 eventsBound = false;
                             }
 
@@ -322,6 +324,10 @@ angular.module('ui.mask', [])
                                 /*jshint validthis: true */
                                 oldSelectionLength = getSelectionLength(this);
                                 iElement.unbind('mouseout', mouseoutHandler);
+                            }
+
+                            function onPasteHandler(e) {
+                                setCaretPosition(this, iElement.val().length);
                             }
 
                             function eventHandler(e) {
