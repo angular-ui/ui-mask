@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.2.0 - 2015-07-05T05:12:50.547Z
+ * Version: 1.3.0 - 2015-07-31T07:01:50.807Z
  * License: MIT
  */
 
@@ -182,6 +182,7 @@ angular.module('ui.mask', [])
                                 iElement.bind('blur', blurHandler);
                                 iElement.bind('mousedown mouseup', mouseDownUpHandler);
                                 iElement.bind('input keyup click focus', eventHandler);
+                                iElement.bind('paste', onPasteHandler);
                                 eventsBound = true;
                             }
 
@@ -196,6 +197,7 @@ angular.module('ui.mask', [])
                                 iElement.unbind('keyup', eventHandler);
                                 iElement.unbind('click', eventHandler);
                                 iElement.unbind('focus', eventHandler);
+                                iElement.unbind('paste', onPasteHandler);
                                 eventsBound = false;
                             }
 
@@ -334,6 +336,11 @@ angular.module('ui.mask', [])
                                 iElement.unbind('mouseout', mouseoutHandler);
                             }
 
+                            function onPasteHandler() {
+                                /*jshint validthis: true */
+                                setCaretPosition(this, iElement.val().length);
+                            }
+
                             function eventHandler(e) {
                                 /*jshint validthis: true */
                                 e = e || {};
@@ -351,7 +358,6 @@ angular.module('ui.mask', [])
                                         valMasked,
                                         valUnmasked = unmaskValue(val),
                                         valUnmaskedOld = oldValueUnmasked,
-                                        valAltered = false,
                                         caretPos = getCaretPosition(this) || 0,
                                         caretPosOld = oldCaretPosition || 0,
                                         caretPosDelta = caretPos - caretPosOld,
@@ -397,7 +403,6 @@ angular.module('ui.mask', [])
                                     var charIndex = maskCaretMap.indexOf(caretPos);
                                     // Strip out non-mask character that user would have deleted if mask hadn't been in the way.
                                     valUnmasked = valUnmasked.substring(0, charIndex) + valUnmasked.substring(charIndex + 1);
-                                    valAltered = true;
                                 }
 
                                 // Update values
@@ -406,12 +411,7 @@ angular.module('ui.mask', [])
                                 oldValue = valMasked;
                                 oldValueUnmasked = valUnmasked;
                                 iElement.val(valMasked);
-                                if (valAltered) {
-                                    // We've altered the raw value after it's been $digest'ed, we need to $apply the new value.
-                                    scope.$apply(function() {
-                                        controller.$setViewValue(valUnmasked);
-                                    });
-                                }
+                                controller.$setViewValue(valUnmasked);
 
                                 // Caret Repositioning
                                 // ===================
