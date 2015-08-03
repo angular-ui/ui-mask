@@ -112,7 +112,12 @@ angular.module('ui.mask', [])
                             }
 
                             iAttrs.$observe('uiMask', initialize);
-                            iAttrs.$observe('placeholder', initPlaceholder);
+                            if (angular.isDefined(iAttrs.uiMaskPlaceholder)) {
+                                iAttrs.$observe('uiMaskPlaceholder', initPlaceholder);
+                            }
+                            else {
+                                iAttrs.$observe('placeholder', initPlaceholder);
+                            }
                             var modelViewValue = false;
                             iAttrs.$observe('modelViewValue', function(val) {
                                 if (val === 'true') {
@@ -157,7 +162,9 @@ angular.module('ui.mask', [])
                                 if (iAttrs.maxlength) { // Double maxlength to allow pasting new val at end of mask
                                     iElement.attr('maxlength', maskCaretMap[maskCaretMap.length - 1] * 2);
                                 }
-                                iElement.attr('placeholder', maskPlaceholder);
+                                if (!angular.isDefined(iAttrs.uiMaskPlaceholder)) {
+                                    iElement.attr('placeholder', maskPlaceholder);
+                                }
                                 iElement.val(viewValue);
                                 controller.$viewValue = viewValue;
                                 controller.$setValidity('mask', isValid);
@@ -231,7 +238,7 @@ angular.module('ui.mask', [])
                             }
 
                             function getPlaceholderChar(i) {
-                                var placeholder = iAttrs.placeholder;
+                                var placeholder = angular.isDefined(iAttrs.uiMaskPlaceholder) ? iAttrs.uiMaskPlaceholder : iAttrs.placeholder;
 
                                 if (typeof placeholder !== 'undefined' && placeholder[i]) {
                                     return placeholder[i];

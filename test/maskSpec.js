@@ -259,6 +259,28 @@ describe("uiMask", function () {
       scope.$apply("myDate = ''");
       expect(input.attr("placeholder")).toBe("DD/MM/YYYY HH:mm");
     });
+
+    it("should accept ui-mask-placeholder", function() {
+      var placeholderHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' placeholder='Phone Number' ui-mask-placeholder='(XXX) XXX-XXXX'>",
+          input           = compileElement(placeholderHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(999) 999-9999'");
+      input.triggerHandler("input");
+      expect(input.val()).toBe("(XXX) XXX-XXXX");
+      expect(input.attr("placeholder")).toBe("Phone Number");
+    });
+
+    it("should interpret empty ui-mask-placeholder", function() {
+      var placeholderHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' placeholder='Phone Number' ui-mask-placeholder>",
+          input           = compileElement(placeholderHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(999) 999-9999'");
+      input.triggerHandler("input");
+      expect(input.val()).toBe("(___) ___-____");
+      expect(input.attr("placeholder")).toBe("Phone Number");
+    })
   });
 
   describe("configuration", function () {
