@@ -31,7 +31,7 @@
                             <label class="col-sm-3" for="masked">Masked Input:</label>
 
                             <div class="col-sm-9">
-                                <input class="form-control" id="masked" name="masked" ui-mask="{{y}}" ng-model="x" placeholder="Write a mask or click a button">
+                                <input class="form-control" id="masked" name="masked" ui-mask="{{y}}" ng-model="x" placeholder="Write a mask or click a button" ui-mask-placeholder>
                                 <span class="help-inline">
                                     <div ng-show="x.length">Model value: <code>{{x}}</code></div>
                                     <div ng-hide="x.length">Model value: <code>undefined</code></div>
