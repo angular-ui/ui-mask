@@ -179,7 +179,7 @@ angular.module('ui.mask', [])
                                 }
                                 iElement.bind('blur', blurHandler);
                                 iElement.bind('mousedown mouseup', mouseDownUpHandler);
-                                iElement.bind(listOptions.eventsToHandle.join(' '), eventHandler);
+                                iElement.bind(linkOptions.eventsToHandle.join(' '), eventHandler);
                                 iElement.bind('paste', onPasteHandler);
                                 eventsBound = true;
                             }
