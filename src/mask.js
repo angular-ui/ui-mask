@@ -48,7 +48,7 @@ angular.module('ui.mask', [])
                             }
 
                             function initPlaceholder(placeholderAttr) {
-                                if (!angular.isDefined(placeholderAttr)) {
+                                if ( ! placeholderAttr) {
                                     return;
                                 }
 
@@ -56,7 +56,7 @@ angular.module('ui.mask', [])
 
                                 // If the mask is processed, then we need to update the value
                                 if (maskProcessed) {
-                                    eventHandler();
+                                    iElement.val(maskValue(unmaskValue(iElement.val())));
                                 }
                             }
 
@@ -162,7 +162,7 @@ angular.module('ui.mask', [])
                                 if (iAttrs.maxlength) { // Double maxlength to allow pasting new val at end of mask
                                     iElement.attr('maxlength', maskCaretMap[maskCaretMap.length - 1] * 2);
                                 }
-                                if (!angular.isDefined(iAttrs.uiMaskPlaceholder)) {
+                                if ( ! originalPlaceholder) {
                                     iElement.attr('placeholder', maskPlaceholder);
                                 }
                                 iElement.val(viewValue);
