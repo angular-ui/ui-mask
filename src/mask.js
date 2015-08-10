@@ -8,7 +8,8 @@ angular.module('ui.mask', [])
                 'A': /[a-zA-Z]/,
                 '*': /[a-zA-Z0-9]/
             },
-            clearOnBlur: true
+            clearOnBlur: true,
+            eventsToHandle: ['input', 'keyup', 'click', 'focus']
         })
         .directive('uiMask', ['uiMaskConfig', '$parse', function(maskConfig, $parse) {
                 function isFocused (elem) {
@@ -178,7 +179,7 @@ angular.module('ui.mask', [])
                                 }
                                 iElement.bind('blur', blurHandler);
                                 iElement.bind('mousedown mouseup', mouseDownUpHandler);
-                                iElement.bind('input keyup click focus', eventHandler);
+                                iElement.bind(linkOptions.eventsToHandle.join(' '), eventHandler);
                                 iElement.bind('paste', onPasteHandler);
                                 eventsBound = true;
                             }
