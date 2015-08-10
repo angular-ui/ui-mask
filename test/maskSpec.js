@@ -271,6 +271,16 @@ describe("uiMask", function () {
       expect(input.attr("placeholder")).toBe("Phone Number");
     });
 
+    it("should accept ui-mask-placeholder and not set val when first showing input", function() {
+      var placeholderHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' placeholder='Phone Number' ui-mask-placeholder='(XXX) XXX-XXXX'>",
+          input           = compileElement(placeholderHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(999) 999-9999'");
+      expect(input.val()).toBe("");
+      expect(input.attr("placeholder")).toBe("Phone Number");
+    });
+
     it("should interpret empty ui-mask-placeholder", function() {
       var placeholderHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' placeholder='Phone Number' ui-mask-placeholder>",
           input           = compileElement(placeholderHtml);
