@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.4.1 - 2015-08-07T00:16:03.522Z
+ * Version: 1.4.2 - 2015-08-10T07:49:52.226Z
  * License: MIT
  */
 
@@ -18,7 +18,8 @@ angular.module('ui.mask', [])
                 'A': /[a-zA-Z]/,
                 '*': /[a-zA-Z0-9]/
             },
-            clearOnBlur: true
+            clearOnBlur: true,
+            eventsToHandle: ['input', 'keyup', 'click', 'focus']
         })
         .directive('uiMask', ['uiMaskConfig', '$parse', function(maskConfig, $parse) {
                 function isFocused (elem) {
@@ -188,7 +189,7 @@ angular.module('ui.mask', [])
                                 }
                                 iElement.bind('blur', blurHandler);
                                 iElement.bind('mousedown mouseup', mouseDownUpHandler);
-                                iElement.bind('input keyup click focus', eventHandler);
+                                iElement.bind(linkOptions.eventsToHandle.join(' '), eventHandler);
                                 iElement.bind('paste', onPasteHandler);
                                 eventsBound = true;
                             }
