@@ -1,6 +1,6 @@
 var fs = require('fs');
 var gulp = require('gulp');
-var karma = require('karma').server;
+var Server = require('karma').Server;
 var concat = require('gulp-concat');
 var jshint = require('gulp-jshint');
 var header = require('gulp-header');
@@ -58,17 +58,19 @@ gulp.task('scripts', ['clean'], function() {
     }))
     .pipe(gulp.dest('dist'))
     .pipe(uglify({preserveComments: 'some'}))
-    .pipe(rename({ext:'.min.js'}))
+    .pipe(rename({extname:'.min.js'}))
     .pipe(gulp.dest('dist'));
 
 });
 
 gulp.task('karma', ['build'], function() {
-  karma.start({configFile : __dirname +'/karma.conf.js', singleRun: true});
+  var server = new Server({configFile : __dirname +'/karma.conf.js', singleRun: true});
+  server.start();
 });
 
 gulp.task('karma-watch', ['build'], function() {
-  karma.start({configFile :  __dirname +'/karma.conf.js', singleRun: false});
+  var server = new Server({configFile : __dirname +'/karma.conf.js', singleRun: false});
+  server.start();
 });
 
 var handleError = function (err) {
