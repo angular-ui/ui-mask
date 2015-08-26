@@ -6,6 +6,24 @@ describe("uiMask", function () {
   var compileElement, scope, config;
 
   beforeEach(module("ui.mask"));
+  beforeEach(function() {
+    angular.module("test",[]).directive("toUpper", function() {
+      return {
+        priority: 200,
+        require: 'ngModel',
+        restrict: 'A',
+        link: function (scope, iElement, iAttrs, controller) {
+          controller.$formatters.push(function(fromModelValue) {
+            return angular.uppercase(fromModelValue);
+          });
+          controller.$parsers.push(function(fromViewValue) {
+            return angular.lowercase(fromViewValue);
+          });
+        }
+      }
+    });
+    module("test");
+  });
   beforeEach(inject(function ($rootScope, $compile, uiMaskConfig) {
     scope = $rootScope;
     config = uiMaskConfig;
@@ -58,6 +76,21 @@ describe("uiMask", function () {
       scope.$apply("mask = '(A) * 9 A'");
       expect(scope.test.input.$viewValue).toBe("");
     });
+
+  });
+  describe("other directives", function() {
+    beforeEach(function () {
+      compileElement("<form name='test'><input to-upper name='input' ng-model='x' ui-mask='{{mask}}'></form>");
+    });
+    it("should play nicely", function() {
+      scope.$apply("x = 'abc123'");
+      scope.$apply("mask = '(A) * 9'");
+      expect(scope.x).toBe("abc123");
+      expect(scope.test.input.$viewValue).toBe("(A) B 1");
+      scope.$apply("mask = '(A)AA'");
+      expect(scope.test.input.$viewValue).toBe("(A)BC");
+    });
+
 
   });
 
