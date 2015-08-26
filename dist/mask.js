@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.4.2 - 2015-08-10T07:49:52.226Z
+ * Version: 1.4.2 - 2015-08-26T03:55:41.036Z
  * License: MIT
  */
 
@@ -169,16 +169,19 @@ angular.module('ui.mask', [])
                                 value = oldValueUnmasked = unmaskValue(controller.$modelValue || '');
                                 valueMasked = oldValue = maskValue(value);
                                 isValid = validateValue(value);
-                                var viewValue = isValid && value.length ? valueMasked : '';
                                 if (iAttrs.maxlength) { // Double maxlength to allow pasting new val at end of mask
                                     iElement.attr('maxlength', maskCaretMap[maskCaretMap.length - 1] * 2);
                                 }
                                 if ( ! originalPlaceholder) {
                                     iElement.attr('placeholder', maskPlaceholder);
                                 }
-                                iElement.val(viewValue);
-                                controller.$viewValue = viewValue;
-                                controller.$setValidity('mask', isValid);
+                                var viewValue = controller.$modelValue;
+                                var idx = controller.$formatters.length;
+                                while(idx--) {
+                                    viewValue = controller.$formatters[idx](viewValue);
+                                }
+                                controller.$viewValue = viewValue || '';
+                                controller.$render();
                                 // Not using $setViewValue so we don't clobber the model value and dirty the form
                                 // without any kind of user interaction.
                             }
