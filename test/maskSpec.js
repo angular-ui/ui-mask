@@ -96,7 +96,7 @@ describe("uiMask", function () {
         input = compileElement("<form name='test'><input to-upper name='input' ng-model='x' model-view-value='true' ui-mask='{{mask}}'></form>");
         input = input.find('input')
       });
-      it("should play nicely", function() {
+      it("should set the model value to the masked view value parsed by other directive", function() {
         scope.$apply("x = '(a) b 1'");
         scope.$apply("mask = '(A) * 9'");
         expect(scope.test.input.$viewValue).toBe("(A) B 1");
