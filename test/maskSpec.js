@@ -78,7 +78,7 @@ describe("uiMask", function () {
     });
 
   });
-  describe("other directives", function() {
+  describe("with other directives", function() {
     beforeEach(function () {
       compileElement("<form name='test'><input to-upper name='input' ng-model='x' ui-mask='{{mask}}'></form>");
     });
@@ -90,8 +90,21 @@ describe("uiMask", function () {
       scope.$apply("mask = '(A)AA'");
       expect(scope.test.input.$viewValue).toBe("(A)BC");
     });
-
-
+    describe("with model-view-value", function() {
+      var input = undefined;
+      beforeEach(function () {
+        input = compileElement("<form name='test'><input to-upper name='input' ng-model='x' model-view-value='true' ui-mask='{{mask}}'></form>");
+        input = input.find('input')
+      });
+      it("should set the model value to the masked view value parsed by other directive", function() {
+        scope.$apply("x = '(a) b 1'");
+        scope.$apply("mask = '(A) * 9'");
+        expect(scope.test.input.$viewValue).toBe("(A) B 1");
+        input.val("(A) C 2").triggerHandler("input").triggerHandler("change");
+        scope.$apply();
+        expect(scope.x).toBe("(a) c 2");
+      });
+    });
   });
 
   describe("user input", function () {
@@ -191,6 +204,21 @@ describe("uiMask", function () {
     });
   });
 
+  describe("with model-view-value", function() {
+    var input = undefined;
+    beforeEach(function () {
+      input = compileElement("<form name='test'><input name='input' ng-model='x' model-view-value='true' ui-mask='{{mask}}'></form>");
+      input = input.find('input')
+    });
+    it("should set the mask in the model", function() {
+      scope.$apply("x = '(a) b 1'");
+      scope.$apply("mask = '(A) * 9'");
+      expect(scope.test.input.$viewValue).toBe("(a) b 1");
+      input.val("(a) c 2").triggerHandler("input").triggerHandler("change");
+      scope.$apply();
+      expect(scope.x).toBe("(a) c 2");
+    });
+  });
   describe("changes from the model", function () {
     it("should set the correct ngModelController.$viewValue", function() {
       compileElement(formHtml);

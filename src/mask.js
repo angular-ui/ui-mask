@@ -11,7 +11,7 @@ angular.module('ui.mask', [])
             clearOnBlur: true,
             eventsToHandle: ['input', 'keyup', 'click', 'focus']
         })
-        .directive('uiMask', ['uiMaskConfig', '$parse', function(maskConfig, $parse) {
+        .directive('uiMask', ['uiMaskConfig', function(maskConfig) {
                 function isFocused (elem) {
                   return elem === document.activeElement && (!document.hasFocus || document.hasFocus()) && !!(elem.type || elem.href || ~elem.tabIndex);
                 }
@@ -60,6 +60,12 @@ angular.module('ui.mask', [])
                                     iElement.val(maskValue(unmaskValue(iElement.val())));
                                 }
                             }
+                            var modelViewValue = false;
+                            iAttrs.$observe('modelViewValue', function(val) {
+                                if (val === 'true') {
+                                    modelViewValue = true;
+                                }
+                            });
 
                             function formatter(fromModelValue) {
                                 if (!maskProcessed) {
@@ -86,7 +92,11 @@ angular.module('ui.mask', [])
                                 if (value === '' && iAttrs.required) {
                                     controller.$setValidity('required', !controller.$error.required);
                                 }
-                                return isValid ? value : undefined;
+                                if (isValid) {
+                                    return modelViewValue ? controller.$viewValue : value;
+                                } else {
+                                    return undefined;
+                                }
                             }
 
                             var linkOptions = {};
@@ -119,18 +129,6 @@ angular.module('ui.mask', [])
                             else {
                                 iAttrs.$observe('placeholder', initPlaceholder);
                             }
-                            var modelViewValue = false;
-                            iAttrs.$observe('modelViewValue', function(val) {
-                                if (val === 'true') {
-                                    modelViewValue = true;
-                                }
-                            });
-                            scope.$watch(iAttrs.ngModel, function(val) {
-                                if (modelViewValue && val) {
-                                    var model = $parse(iAttrs.ngModel);
-                                    model.assign(scope, controller.$viewValue);
-                                }
-                            });
                             controller.$formatters.push(formatter);
                             controller.$parsers.push(parser);
 
