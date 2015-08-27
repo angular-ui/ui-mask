@@ -110,9 +110,7 @@ angular.module('ui.mask', [])
                                             if (Object.prototype.hasOwnProperty.call(original, i)) {
                                                 if (current[i] === undefined) {
                                                     current[i] = angular.copy(original[i]);
-                                                } else {
-                                                    angular.extend(current[i], original[i]);
-                                                }
+                                                } 
                                             }
                                         }
                                         return current;
