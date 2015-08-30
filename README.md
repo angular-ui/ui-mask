@@ -28,6 +28,27 @@ Add the specific module to your dependencies:
 angular.module('myApp', ['ui.mask', ...])
 ```
 
+### Customizing
+You can customize several behaviors of ui-mask by taking advantage of the `ui-options` object. Declare `ui-options` as an additional attribute on the same element where you declare `ui-mask`.
+
+Inside of `ui-options`, you can customize these three properties:
+
+* `maskDefinitions` - default: `{
+                '9': /\d/,
+                'A': /[a-zA-Z]/,
+                '*': /[a-zA-Z0-9]/
+            }`,
+* `clearOnBlur` - default: `true`,
+* `eventsToHandle` - default: `['input', 'keyup', 'click', 'focus']`
+
+When customizing `eventsToHandle` or `clearOnBlur`, the value you supply will replace the default. To customize `eventsToHandle`, be sure to replace the entire array. 
+
+Whereas, `maskDefinitions` is an object, so any custom object you supply will be merged together with the defaults using `angular.extend()`. This allows you to override the defaults selectively, if you wish. 
+
+#### maskDefinitions 
+The keys in `maskDefinitions` represent the special tokens/characters used in your mask declaration to delimit acceptable ranges of inputs. For example, we use '9' here to accept any numeric values for a phone number: `ui-mask="(999) 999-9999"`. The values associated with each token are regexen. Each regex defines the ranges of values that will be acceptable as inputs in the position of that token.
+
+
 ## Development
 
 We use Karma and jshint to ensure the quality of the code.  The easiest way to run these checks is to use grunt:
