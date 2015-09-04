@@ -111,7 +111,9 @@ angular.module('ui.mask', [])
                                                 if (current[i] === undefined) {
                                                     current[i] = angular.copy(original[i]);
                                                 } else {
-                                                    angular.extend(current[i], original[i]);
+                                                    if (angular.isObject(current[i])) {
+                                                        angular.extend(current[i], original[i]);
+                                                    }
                                                 }
                                             }
                                         }
