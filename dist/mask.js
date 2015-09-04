@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.4.4 - 2015-08-27T04:27:23.196Z
+ * Version: 1.4.5 - 2015-09-04T09:04:37.010Z
  * License: MIT
  */
 
@@ -121,7 +121,9 @@ angular.module('ui.mask', [])
                                                 if (current[i] === undefined) {
                                                     current[i] = angular.copy(original[i]);
                                                 } else {
-                                                    angular.extend(current[i], original[i]);
+                                                    if (angular.isObject(current[i])) {
+                                                        angular.extend(current[i], original[i]);
+                                                    }
                                                 }
                                             }
                                         }
