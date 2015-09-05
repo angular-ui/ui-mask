@@ -41,11 +41,11 @@ Inside of `ui-options`, you can customize these three properties:
 * `clearOnBlur` - default: `true`,
 * `eventsToHandle` - default: `['input', 'keyup', 'click', 'focus']`
 
-When customizing `eventsToHandle` or `clearOnBlur`, the value you supply will replace the default. To customize `eventsToHandle`, be sure to replace the entire array. 
+When customizing `eventsToHandle` or `clearOnBlur`, the value you supply will replace the default. To customize `eventsToHandle`, be sure to replace the entire array.
 
-Whereas, `maskDefinitions` is an object, so any custom object you supply will be merged together with the defaults using `angular.extend()`. This allows you to override the defaults selectively, if you wish. 
+Whereas, `maskDefinitions` is an object, so any custom object you supply will be merged together with the defaults using `angular.extend()`. This allows you to override the defaults selectively, if you wish.
 
-#### maskDefinitions 
+#### maskDefinitions
 The keys in `maskDefinitions` represent the special tokens/characters used in your mask declaration to delimit acceptable ranges of inputs. For example, we use '9' here to accept any numeric values for a phone number: `ui-mask="(999) 999-9999"`. The values associated with each token are regexen. Each regex defines the ranges of values that will be acceptable as inputs in the position of that token.
 
 
@@ -68,11 +68,10 @@ The karma task will try to open Firefox and Chrome as browser in which to run th
 
 ### How to release
 
-Use npm to update version and create a tag, then push to GitHub:
+Use gulp to bump version, build and create a tag. Then push to GitHub:
 
 ````sh
-gulp && git commit . # if necessary, build everything and commit latest changes
-npm version [major | minor | patch] # let npm update package.json and create a tag
+gulp release [--patch|--minor|--major]
 git push --tags origin master # push everything to GitHub
 ````
 
