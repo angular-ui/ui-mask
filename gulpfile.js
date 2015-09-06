@@ -13,9 +13,12 @@ var plumber = require('gulp-plumber');//To prevent pipe breaking caused by error
 var git = require('gulp-git');
 var bump = require('gulp-bump');
 var runSequence = require('run-sequence');
+var geSaLaKaCuLa = require('gesalakacula');
+var reKaLa = geSaLaKaCuLa.recursiveKarmaLauncher;
 var versionAfterBump;
 
 gulp.task('default', ['build', 'test']);
+gulp.task('ci', ['karma-sauce']);
 gulp.task('build', ['scripts']);
 gulp.task('test', ['build', 'karma']);
 
@@ -74,6 +77,26 @@ gulp.task('karma', ['build'], function() {
 gulp.task('karma-watch', ['build'], function() {
     var server = new Server({configFile: __dirname + '/karma.conf.js', singleRun: false});
     server.start();
+});
+
+gulp.task('karma-sauce', ['build'], function() {
+  var customLaunchers = geSaLaKaCuLa({
+    // TODO: add windows testing in once
+    // #5 is fixed https://github.com/angular-ui/ui-mask/issues/5
+    // 'Windows 7': {
+    //   'internet explorer': '9..11',
+    // },
+    'OS X 10.10': {
+      'chrome': '43..44',
+      'firefox': '39..40',
+      'safari': '8'
+    }
+  });
+
+  reKaLa({
+    karma: Server,
+    customLaunchers: customLaunchers
+  }, process.exit);
 });
 
 var handleError = function(err) {

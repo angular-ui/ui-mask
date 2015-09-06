@@ -64,4 +64,17 @@ module.exports = function(config) {
     // if true, it capture browsers, run tests and exit
     singleRun: false
   });
+
+  // Sauce Specific configuration for CI
+  if (process.env.SAUCE_USERNAME && process.env.SAUCE_ACCESS_KEY) {
+    config.reporters.push('saucelabs');
+
+    config.set({
+      sauceLabs: {
+        testName: 'UI Mask CI'
+      },
+      captureTimeout:  120000,
+      singleRun: true
+    });
+  }
 };

@@ -1,16 +1,19 @@
 language: node_js
 node_js:
-- '0.12'
+- '0.11'
 git:
   depth: 10
 before_install:
-- export DISPLAY=:99.0
-- sh -e /etc/init.d/xvfb start
 - npm install -qg bower gulp-cli
 - npm install -q
 - bower install --force
 - bower install --force
-script: gulp
+script: gulp ci
+sudo: false
+env:
+  global:
+    - SAUCE_USERNAME=angular-ui-mask
+    - SAUCE_ACCESS_KEY=b4b4d64e-4188-4cae-a91c-29214a389c8a
 deploy:
   provider: npm
   email: adrien.crivelli@gmail.com
