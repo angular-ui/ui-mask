@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.4.5 - 2015-09-24T15:28:43.612Z
+ * Version: 1.4.6 - 2015-09-24T15:33:52.048Z
  * License: MIT
  */
 
