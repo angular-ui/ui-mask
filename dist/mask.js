@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.4.5 - 2015-09-04T09:04:37.010Z
+ * Version: 1.4.6 - 2015-09-24T15:33:52.048Z
  * License: MIT
  */
 
@@ -422,7 +422,10 @@ angular.module('ui.mask', [])
                                 oldValue = valMasked;
                                 oldValueUnmasked = valUnmasked;
                                 iElement.val(valMasked);
-                                controller.$setViewValue(valUnmasked);
+                                
+                                scope.$apply(function() {
+                                    controller.$setViewValue(valUnmasked); // $setViewValue should be run in angular context, otherwise the changes will be invisible to angular and user code.
+                                });                                
 
                                 // Caret Repositioning
                                 // ===================
