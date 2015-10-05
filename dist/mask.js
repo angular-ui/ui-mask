@@ -19,7 +19,7 @@ angular.module('ui.mask', [])
                 '*': /[a-zA-Z0-9]/
             },
             clearOnBlur: true,
-            eventsToHandle: ['input', 'keyup', 'click', 'focus']
+            eventsToHandle: ['input', 'keypress', 'keyup', 'click', 'focus']
         })
         .directive('uiMask', ['uiMaskConfig', function(maskConfig) {
                 function isFocused (elem) {
@@ -205,6 +205,7 @@ angular.module('ui.mask', [])
                                 iElement.unbind('mousedown', mouseDownUpHandler);
                                 iElement.unbind('mouseup', mouseDownUpHandler);
                                 iElement.unbind('input', eventHandler);
+                                iElement.unbind('keypress', eventHandler);
                                 iElement.unbind('keyup', eventHandler);
                                 iElement.unbind('click', eventHandler);
                                 iElement.unbind('focus', eventHandler);
@@ -369,7 +370,7 @@ angular.module('ui.mask', [])
                                         valMasked,
                                         valUnmasked = unmaskValue(val),
                                         valUnmaskedOld = oldValueUnmasked,
-                                        caretPos = getCaretPosition(this) || 0,
+                                        caretPos = getCaretPosition(this, e.keyCode) || 0,
                                         caretPosOld = oldCaretPosition || 0,
                                         caretPosDelta = caretPos - caretPosOld,
                                         caretPosMin = maskCaretMap[0],
@@ -451,7 +452,9 @@ angular.module('ui.mask', [])
                                 if ((caretBumpBack && caretPos < caretPosMax) || (isAddition && !isValidCaretPosition(caretPosOld))) {
                                     caretPos++;
                                 }
-                                oldCaretPosition = caretPos;
+                                if (eventType !== 'input') {
+                                    oldCaretPosition = caretPos;
+                                }
                                 setCaretPosition(this, caretPos);
                             }
 
@@ -459,10 +462,14 @@ angular.module('ui.mask', [])
                                 return maskCaretMap.indexOf(pos) > -1;
                             }
 
-                            function getCaretPosition(input) {
+                            function getCaretPosition(input, eventWhich) {
                                 if (!input)
                                     return 0;
+                                var isRemoving = eventWhich === 8 || eventWhich === 46;
                                 if (input.selectionStart !== undefined) {
+                                    if (!isRemoving) {
+                                        input.selectionStart = input.selectionEnd;
+                                    }
                                     return input.selectionStart;
                                 } else if (document.selection) {
                                     if (isFocused(iElement[0])) {
