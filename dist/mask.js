@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.4.7 - 2015-10-05T04:13:27.168Z
+ * Version: 1.4.7 - 2015-10-16T22:10:28.724Z
  * License: MIT
  */
 
@@ -316,7 +316,8 @@ angular.module('ui.mask', [])
                                 maskComponents = getMaskComponents();
                                 maskProcessed = maskCaretMap.length > 1 ? true : false;
                             }
-
+                            
+                            var prevValue = ''; 
                             function blurHandler() {
                                 if (linkOptions.clearOnBlur) {
                                     oldCaretPosition = 0;
@@ -329,6 +330,11 @@ angular.module('ui.mask', [])
                                         });
                                     }
                                 }
+                                //Check for different value and trigger change.
+                                if (value !== prevValue) {
+                                    iElement.triggerHandler('change');
+                                }
+                                prevValue = value;
                             }
 
                             function mouseDownUpHandler(e) {

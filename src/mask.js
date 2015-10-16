@@ -306,7 +306,8 @@ angular.module('ui.mask', [])
                                 maskComponents = getMaskComponents();
                                 maskProcessed = maskCaretMap.length > 1 ? true : false;
                             }
-
+                            
+                            var prevValue = ''; 
                             function blurHandler() {
                                 if (linkOptions.clearOnBlur) {
                                     oldCaretPosition = 0;
@@ -319,6 +320,11 @@ angular.module('ui.mask', [])
                                         });
                                     }
                                 }
+                                //Check for different value and trigger change.
+                                if (value !== prevValue) {
+                                    iElement.triggerHandler('change');
+                                }
+                                prevValue = value;
                             }
 
                             function mouseDownUpHandler(e) {
