@@ -35,6 +35,15 @@ angular.module('ui.mask', [])
                                     // Vars used exclusively in eventHandler()
                                     oldValue, oldValueUnmasked, oldCaretPosition, oldSelectionLength;
 
+                            var originalIsEmpty = controller.$isEmpty;
+	                        controller.$isEmpty = function(value) {
+		                        if (maskPatterns) {
+			                        return originalIsEmpty(unmaskValue(value || ''));
+		                        } else {
+			                        return originalIsEmpty(value);
+		                        }
+	                        };
+
                             function initialize(maskAttr) {
                                 if (!angular.isDefined(maskAttr)) {
                                     return uninitialize();
@@ -94,9 +103,6 @@ angular.module('ui.mask', [])
                                 // to be out-of-sync with what the controller's $viewValue is set to.
                                 controller.$viewValue = value.length ? maskValue(value) : '';
                                 controller.$setValidity('mask', isValid);
-                                if (value === '' && iAttrs.required) {
-                                    controller.$setValidity('required', !controller.$error.required);
-                                }
                                 if (isValid) {
                                     return modelViewValue ? controller.$viewValue : value;
                                 } else {
