@@ -331,7 +331,8 @@ angular.module('ui.mask', [])
                                         valueMasked = '';
                                         iElement.val('');
                                         scope.$apply(function() {
-                                            controller.$setViewValue('');
+                                            //don't call $setViewValue to avoid changing $pristine state.
+                                            controller.$viewValue = '';
                                         });
                                     }
                                 }
