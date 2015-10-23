@@ -306,7 +306,8 @@ angular.module('ui.mask', [])
                                 maskComponents = getMaskComponents();
                                 maskProcessed = maskCaretMap.length > 1 ? true : false;
                             }
-
+                            
+                            var prevValue = iElement.val(); 
                             function blurHandler() {
                                 if (linkOptions.clearOnBlur) {
                                     oldCaretPosition = 0;
@@ -319,7 +320,34 @@ angular.module('ui.mask', [])
                                         });
                                     }
                                 }
+                                //Check for different value and trigger change.
+                                if (value !== prevValue) {
+                                    triggerChangeEvent(iElement[0]);
+                                }
+                                prevValue = value;
                             }
+                            
+                            function triggerChangeEvent(element) {
+                          		var change;
+                          		if (typeof window.Event == 'function' && !element.fireEvent) {
+                          			// modern browsers and Edge
+                          			change = new Event('change', {
+                          				view: window,
+                          				bubbles: true,
+                          				cancelable: false
+                          			});
+                          			element.dispatchEvent(change);
+                          		} else if ('createEvent' in document) {
+                          			// older browsers
+                          			change = document.createEvent('HTMLEvents');
+                          			change.initEvent('change', false, true);
+                          			element.dispatchEvent(change);
+                          		}
+                          		else if (element.fireEvent) {
+                          			// IE <= 11
+                          			element.fireEvent('onchange');
+                          		}
+                          	}
 
                             function mouseDownUpHandler(e) {
                                 if (e.type === 'mousedown') {
