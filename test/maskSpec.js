@@ -3,7 +3,7 @@ describe("uiMask", function () {
 
   var formHtml  = "<form name='test'><input name='input' ng-model='x' ui-mask='{{mask}}'></form>";
   var inputHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}'>";
-  var compileElement, scope, config;
+  var compileElement, scope, config, timeout;
 
   beforeEach(module("ui.mask"));
   beforeEach(function() {
@@ -24,12 +24,13 @@ describe("uiMask", function () {
     });
     module("test");
   });
-  beforeEach(inject(function ($rootScope, $compile, uiMaskConfig) {
+  beforeEach(inject(function ($rootScope, $compile, uiMaskConfig, $timeout) {
     scope = $rootScope;
     config = uiMaskConfig;
     compileElement = function(html) {
       return $compile(html)(scope);
     };
+    timeout = $timeout; 
   }));
 
   describe("initialization", function () {
@@ -138,7 +139,9 @@ describe("uiMask", function () {
       scope.$apply("mask = '99 9'");
       input.val("3333").triggerHandler("input");
       input.val("3333").triggerHandler("input"); // It used to has a bug when pressing a key repeatedly
-      expect(scope.test.input.$viewValue).toBe("33 3");
+      timeout(function() {
+        expect(scope.test.input.$viewValue).toBe("33 3");
+      }, 0, false);
     });
 
     it("should parse unmasked value to model", function() {

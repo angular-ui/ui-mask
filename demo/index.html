@@ -30,17 +30,18 @@
                         <div class="form-group">
                             <label class="col-sm-3" for="masked">Masked Input:</label>
 
-                            <div class="col-sm-9">
-                                <input class="form-control" id="masked" name="masked" ui-mask="{{y}}" ng-model="x" placeholder="Write a mask or click a button" ui-mask-placeholder>
+                            <div class="col-sm-9" ng-init="vm = {}">
+                                
+                                <input ng-if="!remove" class="form-control" id="masked" name="masked" ui-mask="{{y}}" ui-options="{{options | json}}" model-view-value="{{modelViewValue}}" ng-model="vm.x" placeholder="Write a mask or click a button" ui-mask-placeholder>
                                 <span class="help-inline">
-                                    <div ng-show="x.length">Model value: <code>{{x}}</code></div>
-                                    <div ng-hide="x.length">Model value: <code>undefined</code></div>
+                                    <div ng-show="vm.x.length">Model value: <code>{{vm.x}}</code></div>
+                                    <div ng-hide="vm.x.length">Model value: <code>undefined</code></div>
                                     <div ng-show="demo.masked.$viewValue.length">NgModelController.$viewValue: <code>{{demo.masked.$viewValue}}</code></div>
                                     <div ng-hide="demo.masked.$viewValue.length">NgModelController.$viewValue: <code>undefined</code></div>
                                 </span>
                             </div>
                         </div>
-
+                        
                         <div class="form-group">
                             <label class="col-sm-3" for="definition">Mask Definition:</label>
 
@@ -66,6 +67,9 @@
                                     <button class="btn btn-default" ng-click="y = '(999) 999-9999'">Set to (999) 999-9999</button>
                                 </p>
                                 <p>
+                                    <button class="btn btn-default" ng-click="y = '?(999) 999-9999'">Set to (999) 999-9999 (no validation)</button>
+                                </p>
+                                <p>
                                     <button class="btn btn-default" ng-click="y = '(999) 999-9999 ext. 999'">Set to (999) 999-9999 ext. 999</button>
                                 </p>
                                 <p>
@@ -74,6 +78,35 @@
                                 <p>
                                     <button class="btn btn-default" ng-click="y = '(**: AAA-999)'">Set to (**: AAA-999)</button>
                                 </p>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-3" for="modelViewValue">Model View Value:</label>
+
+                            <div class="col-sm-9">
+                                <input type="checkbox" id="modelViewValue" ng-model="modelViewValue" style="vertical-align: top;">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-3">Re-initialize:</label>
+
+                            <div class="col-sm-9">
+                                <div>Use the following checkbox to reinitialize the ui-mask by removing and adding the target element from the DOM.  Helps with testing different ui-options</div>
+                                <input type="checkbox" ng-model="remove" />
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" ng-init="e.input = e.keyup = e.click = e.focus = true;">
+                            <label class="col-sm-3">Events to handle:</label>
+
+                            <div class="col-sm-9">
+                                <span class="col-sm-3">input</span><input type="checkbox" id="input" ng-model="e.input" ng-click="options = {eventsToHandle: [e.input ? 'input' : null, e.keyup ? 'keyup' : null, e.click ? 'click' : null, e.focus ? 'focus' : null]}" style="vertical-align: top;"><br>
+                                <span class="col-sm-3">keyup</span><input type="checkbox" id="keyup" ng-model="e.keyup" ng-click="options = {eventsToHandle: [e.input ? 'input' : null, e.keyup ? 'keyup' : null, e.click ? 'click' : null, e.focus ? 'focus' : null]}" style="vertical-align: top;"><br>
+                                <span class="col-sm-3">click</span><input type="checkbox" id="click" ng-model="e.click" ng-click="options = {eventsToHandle: [e.input ? 'input' : null, e.keyup ? 'keyup' : null, e.click ? 'click' : null, e.focus ? 'focus' : null]}" style="vertical-align: top;"><br>
+                                <span class="col-sm-3">focus</span><input type="checkbox" id="focus" ng-model="e.focus" ng-click="options = {eventsToHandle: [e.input ? 'input' : null, e.keyup ? 'keyup' : null, e.click ? 'click' : null, e.focus ? 'focus' : null]}" style="vertical-align: top;"><br>
+                                <span class="col-sm-3">ui-options</span><span>{{options | json}}</span>
                             </div>
                         </div>
                     </form>

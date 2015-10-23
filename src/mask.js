@@ -92,15 +92,35 @@ angular.module('ui.mask', [])
                                 if (value === '' && iAttrs.required) {
                                     controller.$setValidity('required', !controller.$error.required);
                                 }
+
+                                //if model view value is set, i don't think we should set the model exactly to the view value.  It should
+                                //be set only up to the point where the user has typed.  Meaning no masked values after the last typed
+                                //value
                                 if (isValid) {
-                                    return modelViewValue ? controller.$viewValue : value;
+                                    if (modelViewValue) {
+                                        var lastUnderscore = controller.$viewValue.indexOf('_');
+                                        if (lastUnderscore >= 0) {
+                                            //first get rid of the underscores, then make sure we're not ending on a mask char
+                                            var noTrailingMask = controller.$viewValue.substring(0, lastUnderscore);
+    
+                                            //then get rid of any mask characters up until the first non masked character (starting from the end)
+                                            while (noTrailingMask.length && maskCaretMap.indexOf(noTrailingMask.length - 1) === -1)
+                                                noTrailingMask = noTrailingMask.substring(0, noTrailingMask.length - 1);
+    
+                                            return noTrailingMask;
+                                        } else {
+                                            return controller.$viewValue;
+                                        }
+                                    }
+    
+                                    return value;
                                 } else {
                                     return undefined;
                                 }
                             }
 
                             var linkOptions = {};
-
+    
                             if (iAttrs.uiOptions) {
                                 linkOptions = scope.$eval('[' + iAttrs.uiOptions + ']');
                                 if (angular.isObject(linkOptions[0])) {
@@ -111,7 +131,9 @@ angular.module('ui.mask', [])
                                                 if (current[i] === undefined) {
                                                     current[i] = angular.copy(original[i]);
                                                 } else {
-                                                    if (angular.isObject(current[i])) {
+                                                    //an array returns true for angular.isObject.  Without the additional check for array
+                                                    //the extend call will overwrite any settings passed to ui-options for eventsToHandle 
+                                                    if (angular.isObject(current[i]) && !angular.isArray(current[i])) {
                                                         angular.extend(current[i], original[i]);
                                                     }
                                                 }
@@ -124,7 +146,7 @@ angular.module('ui.mask', [])
                                 linkOptions = options;
                             }
 
-                            iAttrs.$observe('uiMask', initialize);
+                        iAttrs.$observe('uiMask', initialize);
                             if (angular.isDefined(iAttrs.uiMaskPlaceholder)) {
                                 iAttrs.$observe('uiMaskPlaceholder', initPlaceholder);
                             }
@@ -385,6 +407,7 @@ angular.module('ui.mask', [])
                                 var val = iElement.val(),
                                         valOld = oldValue,
                                         valMasked,
+                                        valAltered = false,
                                         valUnmasked = unmaskValue(val),
                                         valUnmaskedOld = oldValueUnmasked,
                                         caretPos = getCaretPosition(this) || 0,
@@ -400,7 +423,7 @@ angular.module('ui.mask', [])
                                         // Case: Delete and backspace behave identically on a selection
                                         isDeletion = (val.length < valOld.length) || (selectionLenOld && val.length === valOld.length - selectionLenOld),
                                         isSelection = (eventWhich >= 37 && eventWhich <= 40) && e.shiftKey, // Arrow key codes
-
+    
                                         isKeyLeftArrow = eventWhich === 37,
                                         // Necessary due to "input" event not providing a key code
                                         isKeyBackspace = eventWhich === 8 || (eventType !== 'keyup' && isDeletion && (caretPosDelta === -1)),
@@ -432,18 +455,29 @@ angular.module('ui.mask', [])
                                     var charIndex = maskCaretMap.indexOf(caretPos);
                                     // Strip out non-mask character that user would have deleted if mask hadn't been in the way.
                                     valUnmasked = valUnmasked.substring(0, charIndex) + valUnmasked.substring(charIndex + 1);
+                                    valAltered = true;
                                 }
 
                                 // Update values
                                 valMasked = maskValue(valUnmasked);
-
+    
                                 oldValue = valMasked;
                                 oldValueUnmasked = valUnmasked;
+    
+                                //additional check to fix the problem where the viewValue is out of sync with the value of the element.
+                                //better fix for commit 2a83b5fb8312e71d220a497545f999fc82503bd9 (I think)
+                                if (!valAltered && val.length > valMasked.length)
+                                    valAltered = true;
+    
                                 iElement.val(valMasked);
-                                
-                                scope.$apply(function() {
-                                    controller.$setViewValue(valUnmasked); // $setViewValue should be run in angular context, otherwise the changes will be invisible to angular and user code.
-                                });                                
+    
+                                //we need this check.  What could happen if you don't have it is that you'll set the model value without the user
+                                //actually doing anything.  Meaning, things like pristine and touched will be set.
+                                if (valAltered) {
+                                    scope.$apply(function () {
+                                        controller.$setViewValue(valUnmasked); // $setViewValue should be run in angular context, otherwise the changes will be invisible to angular and user code.
+                                    });
+                                }
 
                                 // Caret Repositioning
                                 // ===================
