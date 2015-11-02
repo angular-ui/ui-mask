@@ -31,7 +31,7 @@
                             <label class="col-sm-3" for="masked">Masked Input:</label>
 
                             <div class="col-sm-9">
-                                <input class="form-control" id="masked" name="masked" ui-mask="{{y}}" ng-model="x" placeholder="Write a mask or click a button" ui-mask-placeholder>
+                                <input class="form-control" id="masked" name="masked" ui-mask="{{y}}" ng-model="x" placeholder="Write a mask or click a button" ui-mask-placeholder ui-mask-placeholder-char="{{z}}">
                                 <span class="help-inline">
                                     <div ng-show="x.length">Model value: <code>{{x}}</code></div>
                                     <div ng-hide="x.length">Model value: <code>undefined</code></div>
@@ -56,23 +56,42 @@
                         </div>
 
                         <div class="form-group">
+                            <label class="col-sm-3" for="placeholder-char">Default placeholder char:</label>
+
+                            <div class="col-sm-9">
+                                <input class="form-control" id="placeholder-char" ng-model="z" style="vertical-align: top;">
+                                <span class="help-inline">
+                                    <code>space</code> space symbol.<br>
+                                    <code>_</code>Used by default, if not set.<br>
+                                    You can use here any single char.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label class="col-sm-3">Predefined masks:</label>
 
                             <div class="col-sm-9">
                                 <p>
-                                    <button class="btn btn-default" ng-click="y = undefined">Set to undefined (uninitialize)</button>
+                                    <button class="btn btn-default" ng-click="y = undefined; z=''">Set to undefined (uninitialize)</button>
                                 </p>
                                 <p>
-                                    <button class="btn btn-default" ng-click="y = '(999) 999-9999'">Set to (999) 999-9999</button>
+                                    <button class="btn btn-default" ng-click="y = '(999) 999-9999';z=''">Set to (999) 999-9999</button>
                                 </p>
                                 <p>
-                                    <button class="btn btn-default" ng-click="y = '(999) 999-9999 ext. 999'">Set to (999) 999-9999 ext. 999</button>
+                                    <button class="btn btn-default" ng-click="y = '(999) 999-9999 ext. 999';z=''">Set to (999) 999-9999 ext. 999</button>
                                 </p>
                                 <p>
-                                    <button class="btn btn-default" ng-click="y = '(999) 999-9999 ext. ?9?9?9'">Set to (999) 999-9999 ext. ?9?9?9</button>
+                                    <button class="btn btn-default" ng-click="y = '(999) 999-9999 ext. ?9?9?9';z=''">Set to (999) 999-9999 ext. ?9?9?9</button>
                                 </p>
                                 <p>
-                                    <button class="btn btn-default" ng-click="y = '(**: AAA-999)'">Set to (**: AAA-999)</button>
+                                    <button class="btn btn-default" ng-click="y = '(**: AAA-999)';z=''">Set to (**: AAA-999)</button>
+                                </p>
+                                <p>
+                                    <button class="btn btn-default" ng-click="y = '9999 9999 9999 9999';z='space'">Set to 9999 9999 9999 9999 (with space chars as placeholders)</button>
+                                </p>
+                                <p>
+                                    <button class="btn btn-default" ng-click="y = 'AA-9999';z='*'">Set to AA-9999 (with asterisks chars as placeholders)</button>
                                 </p>
                             </div>
                         </div>
@@ -81,7 +100,7 @@
                 </div>
                 <div class="col-md-6">
                     <h3>How?</h3>
-                    <pre class="prettyprint">&lt;input type=&quot;text&quot; ng-model=&quot;phonenumber&quot; ui-mask=&quot;(999) 999-9999&quot;/&gt;</pre>
+                    <pre class="prettyprint">&lt;input type=&quot;text&quot; ng-model=&quot;phonenumber&quot; ui-mask=&quot;(999) 999-9999&quot;  ui-mask-placeholder ui-mask-placeholder-char="_"/&gt;</pre>
                     <p>Replace &quot;(999) 999-9999&quot; with your desired mask.</p>
                 </div>
             </div>

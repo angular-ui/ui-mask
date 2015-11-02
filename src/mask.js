@@ -60,6 +60,11 @@ angular.module('ui.mask', [])
                                     iElement.val(maskValue(unmaskValue(iElement.val())));
                                 }
                             }
+
+                            function initPlaceholderChar() {
+                                return initialize(iAttrs.uiMask);
+                            }
+
                             var modelViewValue = false;
                             iAttrs.$observe('modelViewValue', function(val) {
                                 if (val === 'true') {
@@ -131,6 +136,10 @@ angular.module('ui.mask', [])
                             else {
                                 iAttrs.$observe('placeholder', initPlaceholder);
                             }
+                            if (angular.isDefined(iAttrs.uiMaskPlaceholderChar)) {
+                                iAttrs.$observe('uiMaskPlaceholderChar', initPlaceholderChar);
+                            }
+
                             controller.$formatters.push(formatter);
                             controller.$parsers.push(parser);
 
@@ -242,12 +251,14 @@ angular.module('ui.mask', [])
                             }
 
                             function getPlaceholderChar(i) {
-                                var placeholder = angular.isDefined(iAttrs.uiMaskPlaceholder) ? iAttrs.uiMaskPlaceholder : iAttrs.placeholder;
+                                var placeholder = angular.isDefined(iAttrs.uiMaskPlaceholder) ? iAttrs.uiMaskPlaceholder : iAttrs.placeholder,
+                                    defaultPlaceholderChar;
 
                                 if (typeof placeholder !== 'undefined' && placeholder[i]) {
                                     return placeholder[i];
                                 } else {
-                                    return '_';
+                                    defaultPlaceholderChar = angular.isDefined(iAttrs.uiMaskPlaceholderChar) && iAttrs.uiMaskPlaceholderChar ? iAttrs.uiMaskPlaceholderChar : '_';
+                                    return (defaultPlaceholderChar.toLowerCase() === 'space') ? ' ' : defaultPlaceholderChar[0];
                                 }
                             }
 
