@@ -374,6 +374,47 @@ describe("uiMask", function () {
       input.triggerHandler("input");
       expect(input.val()).toBe("(___) ___-____");
       expect(input.attr("placeholder")).toBe("Phone Number");
+    });
+
+    it("should accept ui-mask-placeholder-char", function() {
+      var placeholderHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' placeholder='Phone Number' ui-mask-placeholder ui-mask-placeholder-char='X'>",
+          input           = compileElement(placeholderHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(999) 999-9999'");
+      input.triggerHandler("input");
+      expect(input.val()).toBe("(XXX) XXX-XXXX");
+      expect(input.attr("placeholder")).toBe("Phone Number");
+    });
+
+    it("should accept ui-mask-placeholder-char with value `space`", function() {
+      var placeholderHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' placeholder='Phone Number' ui-mask-placeholder ui-mask-placeholder-char='space'>",
+          input           = compileElement(placeholderHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(999) 999-9999'");
+      input.triggerHandler("input");
+      expect(input.val()).toBe("(   )    -    ");
+      expect(input.attr("placeholder")).toBe("Phone Number");
+    });
+
+    it("should not override placeholder value when ui-mask-placeholder is not set and ui-mask-placeholder-char is `space`", function() {
+      var placeholderHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' placeholder='{{placeholder}}' ui-mask-placeholder-char='space'>",
+          input           = compileElement(placeholderHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '99/99/9999'");
+      scope.$apply("placeholder = 'DD/MM/YYYY'");
+      expect(input.attr("placeholder")).toBe("DD/MM/YYYY");
+
+      input.val("12").triggerHandler("input");
+      expect(input.val()).toBe("12/MM/YYYY");
+
+      scope.$apply("placeholder = 'MM/DD/YYYY'");
+      expect(input.val()).toBe("12/DD/YYYY");
+
+      input.triggerHandler("blur");
+      expect(input.attr("placeholder")).toBe("MM/DD/YYYY");
     })
   });
 
