@@ -116,14 +116,16 @@ angular.module('ui.mask', [])
                                                 if (current[i] === undefined) {
                                                     current[i] = angular.copy(original[i]);
                                                 } else {
-                                                    if (angular.isObject(current[i])) {
-                                                        angular.extend(current[i], original[i]);
+                                                    if (angular.isObject(current[i]) && !angular.isArray(current[i])) {
+                                                        current[i] = angular.extend({}, original[i], current[i]);
                                                     }
                                                 }
                                             }
                                         }
                                         return current;
                                     })(options, linkOptions[0]);
+                                } else {
+                                    linkOptions = options;  //gotta be a better way to do this..
                                 }
                             } else {
                                 linkOptions = options;
