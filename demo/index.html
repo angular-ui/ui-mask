@@ -59,11 +59,10 @@
                             <label class="col-sm-3" for="placeholder-char">Default placeholder char:</label>
 
                             <div class="col-sm-9">
-                                <input class="form-control" id="placeholder-char" ng-model="z" style="vertical-align: top;">
+                                <input class="form-control" id="placeholder-char" ng-model="z" style="vertical-align: top; width: 10em;" maxlength="5">
                                 <span class="help-inline">
-                                    <code>space</code> space symbol.<br>
-                                    <code>_</code>Used by default, if not set.<br>
-                                    You can use here any single char.
+                                    You can use any single char, or exactly <code>space</code> to use space symbol.
+                                    The default value if nothing is specified is: <code>_</code>
                                 </span>
                             </div>
                         </div>
