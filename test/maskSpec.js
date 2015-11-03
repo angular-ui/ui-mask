@@ -2,7 +2,7 @@ describe("uiMask", function () {
   "use strict";
 
   var formHtml  = "<form name='test'><input name='input' ng-model='x' ui-mask='{{mask}}'></form>";
-  var inputHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}'>";
+  var inputHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' ui-options='options'>";
   var compileElement, scope, config;
 
   beforeEach(module("ui.mask"));
@@ -380,7 +380,7 @@ describe("uiMask", function () {
   describe("configuration", function () {
     it("should accept the new mask definition set globally", function() {
       config.maskDefinitions["@"] = /[fz]/;
-
+      
       var input = compileElement(inputHtml);
 
       scope.$apply("x = ''");
@@ -389,15 +389,48 @@ describe("uiMask", function () {
       input.triggerHandler("blur");
       expect(input.val()).toBe("f123");
     });
+    
+    it("should merge the mask definition set globally with the definition set per element", function() {    
+      scope.options = {
+        maskDefinitions: {
+          "A": /[A-Z]/,  //make A caps only
+          "b": /[a-z]/   //make b lowercase only
+        }
+      };
+      
+      var input = compileElement(inputHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '@193Ab'");
+      input.val("f123cCCc").triggerHandler("input");
+      input.triggerHandler("blur");
+      expect(input.val()).toBe("f123Cc");
+    });
+    
+    it("should accept the new events to handle per element", function() {
+      scope.options = {
+        eventsToHandle: ['keyup']
+      };
+      
+      var input = compileElement(inputHtml);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '@99-9'");
+      input.val("f111").triggerHandler("input focus click");
+      expect(input.val()).toBe("f111");
+      input.triggerHandler('keyup');
+      expect(input.val()).toBe("f11-1");
+    });
 
     it("should accept the new mask definition set per element", function() {
       delete config.maskDefinitions["@"];
 
-      scope.input = {
-        options: {maskDefinitions: {"@": /[fz]/}}
+      scope.options = {
+        maskDefinitions: {"@": /[fz]/}
       };
+      
+      var input = compileElement(inputHtml);
 
-      var input = compileElement("<input type=\"text\" ng-model=\"x\" ui-mask=\"{{mask}}\" ui-options=\"input.options\">");
       scope.$apply("x = ''");
       scope.$apply("mask = '@999'");
       input.val("f111").triggerHandler("input");
