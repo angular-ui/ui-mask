@@ -289,6 +289,16 @@ describe("uiMask", function () {
       input.triggerHandler("blur");
       expect(input.val()).toBe("992");
     });
+
+    it("should limit optional mask to a single character", function() {
+      var form  = compileElement(formHtml);
+      var input = form.find("input");
+      scope.$apply("x = ''");
+      scope.$apply("mask = '9?99'");
+      input.val("1").triggerHandler("input");
+      input.triggerHandler("change"); // Because IE8 and below are terrible
+      expect(scope.x).toBeUndefined();
+    });
   });
 
   describe("placeholders", function () {
