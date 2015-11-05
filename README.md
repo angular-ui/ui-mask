@@ -51,7 +51,7 @@ The keys in `maskDefinitions` represent the special tokens/characters used in yo
 
 ## Development
 
-We use Karma and jshint to ensure the quality of the code.  The easiest way to run these checks is to use grunt:
+We use Karma and jshint to ensure the quality of the code.  The easiest way to run these checks is to use gulp:
 
 ```sh
 npm install -g gulp-cli
