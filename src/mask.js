@@ -98,9 +98,6 @@ angular.module('ui.mask', [])
                                     controller.$setValidity('required', !controller.$error.required);
                                 }
 
-                                //if model view value is set, i don't think we should set the model exactly to the view value.  It should
-                                //be set only up to the point where the user has typed.  Meaning no masked values after the last typed
-                                //value
                                 if (isValid) {
                                     return modelViewValue ? controller.$viewValue : value;
                                 } else {
