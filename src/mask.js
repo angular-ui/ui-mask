@@ -97,7 +97,6 @@ angular.module('ui.mask', [])
                                 if (value === '' && iAttrs.required) {
                                     controller.$setValidity('required', !controller.$error.required);
                                 }
-
                                 if (isValid) {
                                     return modelViewValue ? controller.$viewValue : value;
                                 } else {
