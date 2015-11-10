@@ -109,7 +109,7 @@ angular.module('ui.mask', [])
                             }
 
                             var linkOptions = {};
-    
+
                             if (iAttrs.uiOptions) {
                                 linkOptions = scope.$eval('[' + iAttrs.uiOptions + ']');
                                 if (angular.isObject(linkOptions[0])) {
@@ -135,7 +135,7 @@ angular.module('ui.mask', [])
                                 linkOptions = options;
                             }
 
-                        iAttrs.$observe('uiMask', initialize);
+                            iAttrs.$observe('uiMask', initialize);
                             if (angular.isDefined(iAttrs.uiMaskPlaceholder)) {
                                 iAttrs.$observe('uiMaskPlaceholder', initPlaceholder);
                             }
@@ -420,7 +420,7 @@ angular.module('ui.mask', [])
                                         // Case: Delete and backspace behave identically on a selection
                                         isDeletion = (val.length < valOld.length) || (selectionLenOld && val.length === valOld.length - selectionLenOld),
                                         isSelection = (eventWhich >= 37 && eventWhich <= 40) && e.shiftKey, // Arrow key codes
-    
+
                                         isKeyLeftArrow = eventWhich === 37,
                                         // Necessary due to "input" event not providing a key code
                                         isKeyBackspace = eventWhich === 8 || (eventType !== 'keyup' && isDeletion && (caretPosDelta === -1)),
@@ -457,7 +457,7 @@ angular.module('ui.mask', [])
 
                                 // Update values
                                 valMasked = maskValue(valUnmasked);
-    
+
                                 oldValue = valMasked;
                                 oldValueUnmasked = valUnmasked;
     
