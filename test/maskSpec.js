@@ -69,6 +69,16 @@ describe("uiMask", function () {
       expect(scope.x).toBe("abc123");
     });
 
+	it("should not dirty or invalidate the input", function() {
+      var input = compileElement(inputHtml);
+      scope.$apply("x = 'abc123'");
+      scope.$apply("mask = '(9) * A'");
+      
+      //Test blur
+      input.triggerHandler("blur");
+      expect(input.hasClass("ng-pristine")).toBeTruthy();
+    });
+
     it("should set ngModelController.$viewValue to match input value", function() {
       compileElement(formHtml);
       scope.$apply("x = 'abc123'");
