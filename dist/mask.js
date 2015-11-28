@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.6.1 - 2015-11-14T14:46:58.619Z
+ * Version: 1.6.2 - 2015-11-28T04:08:54.561Z
  * License: MIT
  */
 
@@ -210,7 +210,6 @@ angular.module('ui.mask', [])
                                 iElement.bind('blur', blurHandler);
                                 iElement.bind('mousedown mouseup', mouseDownUpHandler);
                                 iElement.bind(linkOptions.eventsToHandle.join(' '), eventHandler);
-                                iElement.bind('paste', onPasteHandler);
                                 eventsBound = true;
                             }
 
@@ -225,7 +224,6 @@ angular.module('ui.mask', [])
                                 iElement.unbind('keyup', eventHandler);
                                 iElement.unbind('click', eventHandler);
                                 iElement.unbind('focus', eventHandler);
-                                iElement.unbind('paste', onPasteHandler);
                                 eventsBound = false;
                             }
 
@@ -337,8 +335,8 @@ angular.module('ui.mask', [])
                                 maskComponents = getMaskComponents();
                                 maskProcessed = maskCaretMap.length > 1 ? true : false;
                             }
-                            
-                            var prevValue = iElement.val(); 
+
+                            var prevValue = iElement.val();
                             function blurHandler() {
                                 if (linkOptions.clearOnBlur) {
                                     oldCaretPosition = 0;
@@ -358,7 +356,7 @@ angular.module('ui.mask', [])
                                 }
                                 prevValue = value;
                             }
-                            
+
                             function triggerChangeEvent(element) {
                                 var change;
                                 if (angular.isFunction(window.Event) && !element.fireEvent) {
@@ -395,11 +393,6 @@ angular.module('ui.mask', [])
                                 /*jshint validthis: true */
                                 oldSelectionLength = getSelectionLength(this);
                                 iElement.unbind('mouseout', mouseoutHandler);
-                            }
-
-                            function onPasteHandler() {
-                                /*jshint validthis: true */
-                                setCaretPosition(this, iElement.val().length);
                             }
 
                             function eventHandler(e) {
@@ -473,14 +466,14 @@ angular.module('ui.mask', [])
 
                                 oldValue = valMasked;
                                 oldValueUnmasked = valUnmasked;
-    
+
                                 //additional check to fix the problem where the viewValue is out of sync with the value of the element.
                                 //better fix for commit 2a83b5fb8312e71d220a497545f999fc82503bd9 (I think)
                                 if (!valAltered && val.length > valMasked.length)
                                     valAltered = true;
-    
+
                                 iElement.val(valMasked);
-    
+
                                 //we need this check.  What could happen if you don't have it is that you'll set the model value without the user
                                 //actually doing anything.  Meaning, things like pristine and touched will be set.
                                 if (valAltered) {
