@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.6.3 - 2015-11-28T04:10:02.031Z
+ * Version: 1.6.3 - 2015-12-08T22:16:35.644Z
  * License: MIT
  */
 
@@ -159,7 +159,7 @@ angular.module('ui.mask', [])
                             }
 
                             controller.$formatters.push(formatter);
-                            controller.$parsers.push(parser);
+                            controller.$parsers.unshift(parser);
 
                             function uninitialize() {
                                 maskProcessed = false;
