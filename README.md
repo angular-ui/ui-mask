@@ -9,6 +9,8 @@ Apply a mask on an input field so the user can only type pre-determined pattern.
 ## Usage
 
 
+### Bower
+
 You can get it from [Bower](http://bower.io/)
 
 ```sh
@@ -26,6 +28,28 @@ Add the specific module to your dependencies:
 
 ```javascript
 angular.module('myApp', ['ui.mask', ...])
+```
+
+### NPM (CommonJS, ES6 module)
+
+Also you can use it as CommonJS or ES6 module with any build system that supports those type of modules (Webpack, SystemJS, JSPM etc):
+
+```sh
+npm install angular-ui-mask
+```
+
+And then include it with
+
+```javascript
+// CommonJS
+var uiMask = require('angular-ui-mask');
+angular.module('myApp', [uiMask, ...]);
+```
+
+```javascript
+// ES6 module
+import uiMask from 'angular-ui-mask';
+angular.module('myApp', [uiMask, ...]);
 ```
 
 ### Customizing
