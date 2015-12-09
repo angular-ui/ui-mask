@@ -193,18 +193,7 @@ describe("uiMask", function () {
       expect(scope.x).toBe("");
       expect(input.data("$ngModelController").$error.required).toBeUndefined();
 
-      input = compileElement("<input name='input' ng-model='x' ui-mask='{{mask}}' required>");
-      expect(input.data("$ngModelController").$error.required).toBeUndefined();
-      input.triggerHandler("input");
-      expect(input.data("$ngModelController").$error.required).toBe(true);
-      input.val("abc123").triggerHandler("input");
-      expect(scope.x).toBe("ab1");
-      expect(input.data("$ngModelController").$error.required).toBeUndefined();
-
       input = compileElement("<input name='input' ng-model='x' ui-mask='{{mask}}' ng-required='required'>");
-      expect(input.data("$ngModelController").$error.required).toBeUndefined();
-      input.triggerHandler("input");
-      expect(input.data("$ngModelController").$error.required).toBe(true);
       scope.$apply("required = false");
       expect(input.data("$ngModelController").$error.required).toBeUndefined();
       input.triggerHandler("input");
@@ -213,6 +202,35 @@ describe("uiMask", function () {
       input.triggerHandler("blur");
       expect(input.data("$ngModelController").$error.required).toBeUndefined();
       input.val("").triggerHandler("input");
+      expect(input.data("$ngModelController").$error.required).toBeUndefined();
+    });
+
+    it("should setValidity on required to true when control is required and value is empty", function() {
+      var input = compileElement("<input name='input' ng-model='x' ui-mask='{{mask}}' required>");
+      expect(input.data("$ngModelController").$error.required).toBeUndefined();
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(A) * 9'");
+      scope.$apply("required = true");
+      input.triggerHandler("input");
+      expect(input.data("$ngModelController").$error.required).toBe(true);
+
+      input = compileElement("<input name='input' ng-model='x' ui-mask='{{mask}}' ng-required='required'>");
+      expect(input.data("$ngModelController").$error.required).toBeUndefined();
+      scope.$apply("mask = '(A) A 9'");//change the mask so the $digest cycle runs the initialization code
+      input.triggerHandler("input");
+      expect(input.data("$ngModelController").$error.required).toBe(true);
+    });
+
+    it("should not setValidity on required when control is required and value is non empty", function() {
+      var input = compileElement("<input name='input' ng-model='x' ui-mask='{{mask}}' required>");
+      expect(input.data("$ngModelController").$error.required).toBeUndefined();
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(A) * 9'");
+      scope.$apply("required = true");
+      input.triggerHandler("input");
+      expect(input.data("$ngModelController").$error.required).toBe(true);
+      input.val("(abc123_) _ _").triggerHandler("input");
+      expect(scope.x).toBe("ab1");
       expect(input.data("$ngModelController").$error.required).toBeUndefined();
     });
   });
@@ -290,15 +308,15 @@ describe("uiMask", function () {
       scope.$apply("x = ''");
       scope.$apply("mask = '**?9'");
 
-      input.val("aa").triggerHandler("input");
+      input.val("aa___").triggerHandler("input");
       input.triggerHandler("blur");
       expect(input.val()).toBe("aa_");
 
-      input.val("99a").triggerHandler("input");
+      input.val("99a___").triggerHandler("input");
       input.triggerHandler("blur");
       expect(input.val()).toBe("99_");
 
-      input.val("992").triggerHandler("input");
+      input.val("992___").triggerHandler("input");
       input.triggerHandler("blur");
       expect(input.val()).toBe("992");
     });
@@ -444,6 +462,7 @@ describe("uiMask", function () {
       var placeholderHtml = "<input name='input' ng-model='x' ui-mask='(999) 999-9999' placeholder='Phone Number' ui-mask-placeholder-char='5'>",
           input           = compileElement(placeholderHtml);
 
+      scope.$apply();
       input.val("6505265486").triggerHandler("input");
       expect(input.val()).toBe("(650) 526-5486");
     });
@@ -452,6 +471,7 @@ describe("uiMask", function () {
       var placeholderHtml = "<input name='input' ng-model='x' ui-mask='(999) 999-9999' placeholder='Phone Number' ui-mask-placeholder='(555) 555-5555'>",
           input           = compileElement(placeholderHtml);
 
+      scope.$apply();
       input.val("6505265486").triggerHandler("input");
       expect(input.val()).toBe("(650) 526-5486");
     });
@@ -465,7 +485,7 @@ describe("uiMask", function () {
 
       scope.$apply("x = ''");
       scope.$apply("mask = '@193'");
-      input.val("f123").triggerHandler("input");
+      input.val("f123____").triggerHandler("input");
       input.triggerHandler("blur");
       expect(input.val()).toBe("f123");
     });
@@ -513,7 +533,7 @@ describe("uiMask", function () {
 
       scope.$apply("x = ''");
       scope.$apply("mask = '@999'");
-      input.val("f111").triggerHandler("input");
+      input.val("f111____").triggerHandler("input");
       input.triggerHandler("blur");
       expect(input.val()).toBe("f111");
     });
