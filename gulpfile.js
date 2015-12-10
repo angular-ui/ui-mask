@@ -81,11 +81,9 @@ gulp.task('karma-watch', ['build'], function() {
 
 gulp.task('karma-sauce', ['build'], function() {
   var customLaunchers = geSaLaKaCuLa({
-    // TODO: add windows testing in once
-    // #5 is fixed https://github.com/angular-ui/ui-mask/issues/5
-    // 'Windows 7': {
-    //   'internet explorer': '9..11',
-    // },
+    'Windows 7': {
+      'internet explorer': '9..11',
+    },
     'OS X 10.10': {
       'chrome': '43..44',
       'firefox': '39..40',
