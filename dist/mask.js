@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.6.5 - 2015-12-10T01:26:02.994Z
+ * Version: 1.6.6 - 2015-12-17T04:05:05.328Z
  * License: MIT
  */
 
@@ -47,7 +47,7 @@ angular.module('ui.mask', [])
 
                             var originalIsEmpty = controller.$isEmpty;
 	                        controller.$isEmpty = function(value) {
-		                        if (maskPatterns) {
+		                        if (maskProcessed) {
 			                        return originalIsEmpty(unmaskValue(value || ''));
 		                        } else {
 			                        return originalIsEmpty(value);
