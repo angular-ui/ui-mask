@@ -37,7 +37,7 @@ angular.module('ui.mask', [])
 
                             var originalIsEmpty = controller.$isEmpty;
 	                        controller.$isEmpty = function(value) {
-		                        if (maskPatterns) {
+		                        if (maskProcessed) {
 			                        return originalIsEmpty(unmaskValue(value || ''));
 		                        } else {
 			                        return originalIsEmpty(value);

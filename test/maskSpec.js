@@ -233,6 +233,14 @@ describe("uiMask", function () {
       expect(scope.x).toBe("ab1");
       expect(input.data("$ngModelController").$error.required).toBeUndefined();
     });
+
+    it("should set the model value properly when control is required and the mask is undefined", function() {
+      var input = compileElement('<input ng-required="true" ui-mask="{{mask}}" ng-model="x" />');
+      scope.$apply("x = ''");
+      expect(scope.mask).toBeUndefined();
+      input.val("12345").triggerHandler("change");
+      expect(scope.x).toBe("12345");
+    });
   });
 
   describe("verify change is called", function () {
