@@ -89,6 +89,7 @@ describe("uiMask", function () {
     });
 
   });
+
   describe("with other directives", function() {
     beforeEach(function () {
       compileElement("<form name='test'><input to-upper name='input' ng-model='x' ui-mask='{{mask}}'></form>");
@@ -115,6 +116,15 @@ describe("uiMask", function () {
         scope.$apply();
         expect(scope.x).toBe("(a) c 2");
       });
+    });
+
+    describe("nested inside another directive", function() {
+        it("should have the correct placeholder value inside ng-if", function() {
+            var input = compileElement('<div><div ng-if="showMe"><input type="text" ng-model="x" ui-mask="99/99/9999" ui-mask-placeholder="__/__/____" placeholder="date" /></div></div>');
+            scope.$apply("showMe = true");
+            input = input.find('input');
+            expect(input.val()).toBe("");
+        })
     });
   });
 
