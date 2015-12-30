@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.6.6 - 2015-12-17T04:05:05.328Z
+ * Version: 1.6.7 - 2015-12-30T03:32:53.475Z
  * License: MIT
  */
 
@@ -75,7 +75,11 @@ angular.module('ui.mask', [])
                                 maskPlaceholder = placeholderAttr;
 
                                 // If the mask is processed, then we need to update the value
-                                if (maskProcessed) {
+                                // but don't set the value if there is nothing entered into the element
+                                // and there is a placeholder attribute on the element because that
+                                // will only set the value as the blank maskPlaceholder
+                                // and override the placeholder on the element
+                                if (maskProcessed && !(iElement.val().length === 0 && angular.isDefined(iAttrs.placeholder))) {
                                     iElement.val(maskValue(unmaskValue(iElement.val())));
                                 }
                             }
