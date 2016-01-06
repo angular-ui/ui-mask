@@ -251,6 +251,18 @@ describe("uiMask", function () {
       input.val("12345").triggerHandler("change");
       expect(scope.x).toBe("12345");
     });
+
+    it("should not bleed static mask characters into the value when backspacing", function() {
+        var input = compileElement(inputHtml);
+        scope.$apply("mask = 'QT****'");
+        input.triggerHandler('focus');
+        expect(input.val()).toBe("QT____");
+        //simulate a backspace event
+        input.triggerHandler({ type: 'keydown', which: 8 });
+        input.triggerHandler({ type: 'keyup', which: 8 });
+        expect(input.val()).toBe("QT____");
+        expect(scope.x).toBeUndefined();
+    });
   });
 
   describe("verify change is called", function () {
