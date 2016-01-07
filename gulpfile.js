@@ -15,12 +15,14 @@ var bump = require('gulp-bump');
 var runSequence = require('run-sequence');
 var geSaLaKaCuLa = require('gesalakacula');
 var reKaLa = geSaLaKaCuLa.recursiveKarmaLauncher;
+var connect = require('gulp-connect');
+var angularProtractor = require('gulp-angular-protractor');
 var versionAfterBump;
 
 gulp.task('default', ['build', 'test']);
-gulp.task('ci', ['karma-sauce']);
+gulp.task('ci', ['protractor-sauce','karma-sauce']);
 gulp.task('build', ['scripts']);
-gulp.task('test', ['build', 'karma']);
+gulp.task('test', ['build', 'protractor', 'karma-protractor']);
 
 gulp.task('watch', ['build', 'karma-watch'], function() {
     gulp.watch(['src/**/*.{js,html}'], ['build']);
@@ -69,17 +71,17 @@ gulp.task('scripts', ['clean'], function() {
 
 });
 
-gulp.task('karma', ['build'], function() {
-    var server = new Server({configFile: __dirname + '/karma.conf.js', singleRun: true});
-    server.start();
-});
+//need this task so that karma singleRun doesn't kill the process before protractor finishes its tests
+gulp.task('karma-protractor', ['protractor'], runKarma.bind(this, true));
+gulp.task('karma', ['build'], runKarma.bind(this, true));
+gulp.task('karma-watch', ['build'], runKarma.bind(this, false));
 
-gulp.task('karma-watch', ['build'], function() {
-    var server = new Server({configFile: __dirname + '/karma.conf.js', singleRun: false});
+function runKarma(singleRun) {
+    var server = new Server({configFile: __dirname + '/karma.conf.js', singleRun: singleRun});
     server.start();
-});
+}
 
-gulp.task('karma-sauce', ['build'], function() {
+gulp.task('karma-sauce', ['build', 'protractor-sauce'], function() {
   var customLaunchers = geSaLaKaCuLa({
     'Windows 7': {
       'internet explorer': '9..11',
@@ -96,6 +98,34 @@ gulp.task('karma-sauce', ['build'], function() {
     customLaunchers: customLaunchers
   }, process.exit);
 });
+
+gulp.task('protractor', ['build'], function(callback) {
+    runProtractor('protractor.config.js', callback);
+});
+
+gulp.task('protractor-sauce', ['build'], function(callback) {
+    runProtractor('protractor.travis.config.js', callback);
+});
+
+var runProtractor = function(configFile, callback) {
+    connect.server({
+        port: 8000
+    });
+
+    gulp.src(['test/maskSpec.protractor.js'])
+        .pipe(angularProtractor({
+            'configFile': configFile,
+            'debug': false,
+            'autoStartStopServer': true
+        }))
+        .on('error', function(e) {
+            callback(e);
+        })
+        .on('end', function() {
+            connect.serverClose();
+            callback();
+        });
+};
 
 var handleError = function(err) {
     console.log(err.toString());

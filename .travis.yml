@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- '0.11'
+- 'node'
 git:
   depth: 10
 before_install:
@@ -22,3 +22,6 @@ deploy:
   on:
     tags: true
     repo: angular-ui/ui-mask
+
+addons:
+    sauce_connect: true
