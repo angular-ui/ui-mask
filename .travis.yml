@@ -22,6 +22,3 @@ deploy:
   on:
     tags: true
     repo: angular-ui/ui-mask
-
-addons:
-    sauce_connect: true

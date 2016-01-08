@@ -17,12 +17,17 @@ var geSaLaKaCuLa = require('gesalakacula');
 var reKaLa = geSaLaKaCuLa.recursiveKarmaLauncher;
 var connect = require('gulp-connect');
 var angularProtractor = require('gulp-angular-protractor');
-var versionAfterBump;
+var sauceConnectLauncher = require('sauce-connect-launcher');
+var versionAfterBump, sauceConnectProcess;
 
 gulp.task('default', ['build', 'test']);
-gulp.task('ci', ['protractor-sauce','karma-sauce']);
 gulp.task('build', ['scripts']);
-gulp.task('test', ['build', 'protractor', 'karma-protractor']);
+gulp.task('test', ['build', 'protractor', 'karma']);
+gulp.task('ci', ['protractor-sauce','karma-sauce'], function() {
+    sauceConnectProcess.close(function() {
+        console.log("Closed Sauce Connect process");
+    });
+});
 
 gulp.task('watch', ['build', 'karma-watch'], function() {
     gulp.watch(['src/**/*.{js,html}'], ['build']);
@@ -71,17 +76,36 @@ gulp.task('scripts', ['clean'], function() {
 
 });
 
-//need this task so that karma singleRun doesn't kill the process before protractor finishes its tests
-gulp.task('karma-protractor', ['protractor'], runKarma.bind(this, true));
-gulp.task('karma', ['build'], runKarma.bind(this, true));
-gulp.task('karma-watch', ['build'], runKarma.bind(this, false));
+gulp.task('karma', ['build'], function(callback) {
+    runKarma(true, callback);
+});
+gulp.task('karma-watch', ['build'], function(callback) {
+    runKarma(false, callback);
+});
 
-function runKarma(singleRun) {
-    var server = new Server({configFile: __dirname + '/karma.conf.js', singleRun: singleRun});
+function runKarma(singleRun, callback) {
+    var server = new Server({configFile: __dirname + '/karma.conf.js', singleRun: singleRun}, function(exitCode) {
+        callback();
+    });
     server.start();
 }
 
-gulp.task('karma-sauce', ['build', 'protractor-sauce'], function() {
+gulp.task('start-sauce-connect', function(callback) {
+    sauceConnectLauncher({
+        username: process.env.SAUCE_USERNAME,
+        accessKey: process.env.SAUCE_ACCESS_KEY,
+        tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER
+    }, function(err, sauceProcess) {
+        if (err) {
+            callback(err);
+        }
+
+        sauceConnectProcess = sauceProcess;
+        callback();
+    });
+});
+
+gulp.task('karma-sauce', ['build', 'start-sauce-connect'], function(callback) {
   var customLaunchers = geSaLaKaCuLa({
     'Windows 7': {
       'internet explorer': '9..11',
@@ -94,16 +118,18 @@ gulp.task('karma-sauce', ['build', 'protractor-sauce'], function() {
   });
 
   reKaLa({
-    karma: Server,
-    customLaunchers: customLaunchers
-  }, process.exit);
+      karma: Server,
+      customLaunchers: customLaunchers
+  }, function(code) {
+      callback();
+  });
 });
 
 gulp.task('protractor', ['build'], function(callback) {
     runProtractor('protractor.config.js', callback);
 });
 
-gulp.task('protractor-sauce', ['build'], function(callback) {
+gulp.task('protractor-sauce', ['build', 'start-sauce-connect'], function(callback) {
     runProtractor('protractor.travis.config.js', callback);
 });
 
