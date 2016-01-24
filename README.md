@@ -55,7 +55,7 @@ angular.module('myApp', [uiMask, ...]);
 ### Customizing
 You can customize several behaviors of ui-mask by taking advantage of the `ui-options` object. Declare `ui-options` as an additional attribute on the same element where you declare `ui-mask`.
 
-Inside of `ui-options`, you can customize these three properties:
+Inside of `ui-options`, you can customize these four properties:
 
 * `maskDefinitions` - default: `{
                 '9': /\d/,
@@ -63,9 +63,12 @@ Inside of `ui-options`, you can customize these three properties:
                 '*': /[a-zA-Z0-9]/
             }`,
 * `clearOnBlur` - default: `true`,
+* `clearOnBlurPlaceholder` - default: `false`,
 * `eventsToHandle` - default: `['input', 'keyup', 'click', 'focus']`
 
 When customizing `eventsToHandle` or `clearOnBlur`, the value you supply will replace the default. To customize `eventsToHandle`, be sure to replace the entire array.
+
+When setting `clearOnBlurPlaceholder` to `true`, it will show the placeholder text instead of the empty mask. It requires the `ui-mask-placeholder` attribute to be set on the input to display properly.
 
 Whereas, `maskDefinitions` is an object, so any custom object you supply will be merged together with the defaults using `angular.extend()`. This allows you to override the defaults selectively, if you wish.
 
