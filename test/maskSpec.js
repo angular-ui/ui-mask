@@ -611,6 +611,45 @@ describe("uiMask", function () {
       input.triggerHandler("blur");
       expect(input.val()).toBe("");
     });
+
+    var inputHtmlClearOnBlurPlaceholder = "<input name='input' ng-model='x' ui-mask='{{mask}}' ui-options=\"input.options\" ui-mask-placeholder placeholder=\"PLACEHOLDER\">";
+
+    it("should not show placeholder when value is invalid if clearOnBlurPlaceholder is false", function() {
+      scope.input = {
+        options: {
+          clearOnBlur: false,
+          clearOnBlurPlaceholder: false
+        }
+      };
+
+      var input = compileElement(inputHtmlClearOnBlurPlaceholder);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(9) * A'");
+
+      input.val("").triggerHandler("input");
+      input.triggerHandler("blur");
+      expect(input.val()).toBe("(_) _ _");
+    });
+
+    it("should show placeholder when value is invalid if clearOnBlurPlaceholder is true", function() {
+      scope.input = {
+        options: {
+          clearOnBlur: false,
+          clearOnBlurPlaceholder: true
+        }
+      };
+
+      var input = compileElement(inputHtmlClearOnBlurPlaceholder);
+
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(9) * A'");
+
+      input.val("").triggerHandler("input");
+      input.triggerHandler("blur");
+      expect(input.val()).toBe("");
+      expect(input.attr("placeholder")).toBe("PLACEHOLDER");
+    });
   });
 
 });

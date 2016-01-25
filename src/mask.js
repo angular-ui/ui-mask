@@ -9,6 +9,7 @@ angular.module('ui.mask', [])
                 '*': /[a-zA-Z0-9]/
             },
             clearOnBlur: true,
+            clearOnBlurPlaceholder: false,
             eventsToHandle: ['input', 'keyup', 'click', 'focus']
         })
         .directive('uiMask', ['uiMaskConfig', function(maskConfig) {
@@ -347,7 +348,7 @@ angular.module('ui.mask', [])
 
                             var prevValue = iElement.val();
                             function blurHandler() {
-                                if (linkOptions.clearOnBlur) {
+                                if (linkOptions.clearOnBlur || ((linkOptions.clearOnBlurPlaceholder) && (value.length === 0) && iAttrs.placeholder)) {
                                     oldCaretPosition = 0;
                                     oldSelectionLength = 0;
                                     if (!isValid || value.length === 0) {
@@ -497,7 +498,7 @@ angular.module('ui.mask', [])
                                     var charIndex = maskCaretMap.indexOf(caretPos);
                                     // Strip out non-mask character that user would have deleted if mask hadn't been in the way.
                                     valUnmasked = valUnmasked.substring(0, charIndex) + valUnmasked.substring(charIndex + 1);
-                                    
+
                                     // If value has not changed, don't want to call $setViewValue, may be caused by IE raising input event due to placeholder
                                     if (valUnmasked !== valUnmaskedOld)
                                     	valAltered = true;
