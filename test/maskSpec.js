@@ -254,6 +254,22 @@ describe("uiMask", function () {
         expect(input.val()).toBe("QT____");
         expect(scope.x).toBe('');
     });
+
+    it("should set model value properly when the value contains the same character as a static mask character", function() {
+        var input = compileElement(inputHtml);
+        scope.$apply("mask = '19'");
+        input.triggerHandler("input");
+        expect(input.val()).toBe("1_");
+        input.val("11").triggerHandler("change");
+        expect(scope.x).toBe("1");
+
+        scope.$apply("mask = '9991999'");
+        scope.$apply("x = ''");
+        input.triggerHandler("input");
+        expect(input.val()).toBe("___1___");
+        input.val("1231456").triggerHandler("change");
+        expect(scope.x).toBe("123456");
+    });
   });
 
   describe("verify change is called", function () {
