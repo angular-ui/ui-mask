@@ -320,10 +320,15 @@ angular.module('ui.mask', [])
                                     return s !== '';
                                 });
 
+                                // need a string search offset in cases where the mask contains multiple identical components
+                                // I.E. a mask of 99.99.99-999.99
+                                var offset = 0;
                                 return components.map(function(c) {
+                                    var componentPosition = maskPlaceholderCopy.indexOf(c, offset);
+                                    offset = componentPosition + 1;
                                     return {
                                         value: c,
-                                        position: maskPlaceholderCopy.indexOf(c)
+                                        position: componentPosition
                                     };
                                 });
                             }

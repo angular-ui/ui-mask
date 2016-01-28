@@ -270,6 +270,13 @@ describe("uiMask", function () {
         input.val("1231456").triggerHandler("change");
         expect(scope.x).toBe("123456");
     });
+
+    it("should mask the input properly with multiple identical mask components", function() {
+        var input = compileElement(inputHtml);
+        scope.$apply("mask = '99.99.99-999.99'");
+        input.val("811").triggerHandler("input");
+        expect(input.val()).toBe("81.1_.__-___.__");
+    });
   });
 
   describe("verify change is called", function () {
