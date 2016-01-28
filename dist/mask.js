@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.7.0 - 2016-01-25T02:21:58.293Z
+ * Version: 1.7.1 - 2016-01-28T02:47:50.148Z
  * License: MIT
  */
 
@@ -244,12 +244,30 @@ angular.module('ui.mask', [])
 
                             function unmaskValue(value) {
                                 var valueUnmasked = '',
-                                        maskPatternsCopy = maskPatterns.slice();
+                                    input = iElement[0],
+                                    maskPatternsCopy = maskPatterns.slice(),
+                                    selectionStart = oldCaretPosition,
+                                    selectionEnd = selectionStart + getSelectionLength(input),
+                                    valueOffset, valueDelta, tempValue = '';
                                 // Preprocess by stripping mask components from value
                                 value = value.toString();
+                                valueOffset = 0;
+                                valueDelta = value.length - maskPlaceholder.length;
                                 angular.forEach(maskComponents, function(component) {
-                                    value = value.replace(component, '');
+                                    var position = component.position;
+                                    //Only try and replace the component if the component position is not within the selected range
+                                    //If component was in selected range then it was removed with the user input so no need to try and remove that component
+                                    if (!(position >= selectionStart && position < selectionEnd)) {
+                                        if (position >= selectionStart) {
+                                            position += valueDelta;
+                                        }
+                                        if (value.substring(position, position + component.value.length) === component.value) {
+                                            tempValue += value.slice(valueOffset, position);// + value.slice(position + component.value.length);
+                                            valueOffset = position + component.value.length;
+                                        }
+                                    }
                                 });
+                                value = tempValue + value.slice(valueOffset);
                                 angular.forEach(value.split(''), function(chr) {
                                     if (maskPatternsCopy.length && maskPatternsCopy[0].test(chr)) {
                                         valueUnmasked += chr;
@@ -294,7 +312,7 @@ angular.module('ui.mask', [])
                             // E.g., a mask pattern of '+7 9999' won't have the 7 bleed into the unmasked value.
                             function getMaskComponents() {
                                 var maskPlaceholderChars = maskPlaceholder.split(''),
-                                        maskPlaceholderCopy;
+                                        maskPlaceholderCopy, components;
 
                                 //maskCaretMap can have bad values if the input has the ui-mask attribute implemented as an obversable property, i.e. the demo page
                                 if (maskCaretMap && !isNaN(maskCaretMap[0])) {
@@ -307,7 +325,17 @@ angular.module('ui.mask', [])
                                     });
                                 }
                                 maskPlaceholderCopy = maskPlaceholderChars.join('');
-                                return maskPlaceholderCopy.replace(/[_]+/g, '_').split('_');
+                                components = maskPlaceholderCopy.replace(/[_]+/g, '_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
+                                components = components.filter(function(s) {
+                                    return s !== '';
+                                });
+
+                                return components.map(function(c) {
+                                    return {
+                                        value: c,
+                                        position: maskPlaceholderCopy.indexOf(c)
+                                    };
+                                });
                             }
 
                             function processRawMask(mask) {
@@ -531,7 +559,7 @@ angular.module('ui.mask', [])
                                 //actually doing anything.  Meaning, things like pristine and touched will be set.
                                 if (valAltered) {
                                     scope.$apply(function () {
-                                        controller.$setViewValue(valUnmasked); // $setViewValue should be run in angular context, otherwise the changes will be invisible to angular and user code.
+                                        controller.$setViewValue(valMasked); // $setViewValue should be run in angular context, otherwise the changes will be invisible to angular and user code.
                                     });
                                 }
 
