@@ -75,11 +75,13 @@ Whereas, `maskDefinitions` is an object, so any custom object you supply will be
 #### Global customization
 In addition to customizing behaviors for a specific element, you can also customize the behaviors globally. To do this, simply use the `uiMaskConfig` provider in your app configuration. Example:
 
-`app.config(['uiMaskConfigProvider', function(uiMaskConfigProvider) {
+```sh
+app.config(['uiMaskConfigProvider', function(uiMaskConfigProvider) {
   uiMaskConfigProvider.maskDefinitions({'A': /[a-z], '*': /[a-zA-Z0-9]/});
   uiMaskConfigProvider.clearOnBlur(false);
   uiMaskConfigProvider.eventsToHandle(['input', 'keyup', 'click']);
-}`
+}
+```
 
 #### maskDefinitions
 The keys in `maskDefinitions` represent the special tokens/characters used in your mask declaration to delimit acceptable ranges of inputs. For example, we use '9' here to accept any numeric values for a phone number: `ui-mask="(999) 999-9999"`. The values associated with each token are regexen. Each regex defines the ranges of values that will be acceptable as inputs in the position of that token.
