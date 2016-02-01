@@ -34,7 +34,7 @@ angular.module('ui.mask', [])
                 return tempOptions;
             }];
         })
-        .directive('uiMask', ['uiMaskConfig', function(maskConfig) {
+        .directive('uiMask', ['uiMask.Config', function(maskConfig) {
                 function isFocused (elem) {
                   return elem === document.activeElement && (!document.hasFocus || document.hasFocus()) && !!(elem.type || elem.href || ~elem.tabIndex);
                 }

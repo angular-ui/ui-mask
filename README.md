@@ -76,7 +76,7 @@ Whereas, `maskDefinitions` is an object, so any custom object you supply will be
 In addition to customizing behaviors for a specific element, you can also customize the behaviors globally. To do this, simply use the `uiMaskConfig` provider in your app configuration. Example:
 
 ```sh
-app.config(['uiMaskConfigProvider', function(uiMaskConfigProvider) {
+app.config(['uiMask.ConfigProvider', function(uiMaskConfigProvider) {
   uiMaskConfigProvider.maskDefinitions({'A': /[a-z], '*': /[a-zA-Z0-9]/});
   uiMaskConfigProvider.clearOnBlur(false);
   uiMaskConfigProvider.eventsToHandle(['input', 'keyup', 'click']);

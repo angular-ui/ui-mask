@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.7.2 - 2016-02-01T13:13:49.868Z
+ * Version: 1.7.2 - 2016-02-01T13:34:56.468Z
  * License: MIT
  */
 
@@ -44,7 +44,7 @@ angular.module('ui.mask', [])
                 return tempOptions;
             }];
         })
-        .directive('uiMask', ['uiMaskConfig', function(maskConfig) {
+        .directive('uiMask', ['uiMask.Config', function(maskConfig) {
                 function isFocused (elem) {
                   return elem === document.activeElement && (!document.hasFocus || document.hasFocus()) && !!(elem.type || elem.href || ~elem.tabIndex);
                 }
