@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.7.2 - 2016-01-29T20:19:51.190Z
+ * Version: 1.7.2 - 2016-02-01T13:13:49.868Z
  * License: MIT
  */
 
@@ -12,17 +12,18 @@
  Attaches input mask onto input element
  */
 angular.module('ui.mask', [])
-        .provider('uiMaskConfig', function() {
-            var options = {
-                maskDefinitions: {
-                    '9': /\d/,
-                    'A': /[a-zA-Z]/,
-                    '*': /[a-zA-Z0-9]/
-                },
-                clearOnBlur: true,
-                clearOnBlurPlaceholder: false,
-                eventsToHandle: ['input', 'keyup', 'click', 'focus']
-            };
+        .value('uiMaskConfig', {
+            maskDefinitions: {
+                '9': /\d/,
+                'A': /[a-zA-Z]/,
+                '*': /[a-zA-Z0-9]/
+            },
+            clearOnBlur: true,
+            clearOnBlurPlaceholder: false,
+            eventsToHandle: ['input', 'keyup', 'click', 'focus']
+        })
+        .provider('uiMask.Config', function() {
+            var options = {};
 
             this.clearOnBlur = function(clearOnBlur) {
                 return options.clearOnBlur = clearOnBlur;
@@ -33,9 +34,15 @@ angular.module('ui.mask', [])
             this.eventsToHandle = function(eventsToHandle) {
                 return options.eventsToHandle = eventsToHandle;
             };
-            this.$get = function() {
-                return options;
-            };
+            this.$get = ['uiMaskConfig', function(uiMaskConfig) {
+                var tempOptions = uiMaskConfig;
+                for(var prop in options)
+                {
+                    tempOptions[prop] = options[prop];
+                }
+
+                return tempOptions;
+            }];
         })
         .directive('uiMask', ['uiMaskConfig', function(maskConfig) {
                 function isFocused (elem) {
