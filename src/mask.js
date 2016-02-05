@@ -502,7 +502,7 @@ angular.module('ui.mask', [])
                                 oldSelectionLength = getSelectionLength(this);
 
                                 // These events don't require any action
-                                if (isSelection || (isSelected && (eventType === 'click' || eventType === 'keyup'))) {
+                                if (isSelection || (isSelected && (eventType === 'click' || eventType === 'keyup' || eventType === 'focus'))) {
                                     return;
                                 }
 
