@@ -178,7 +178,7 @@ angular.module('ui.mask', [])
                                 iAttrs.$observe('uiMaskPlaceholderChar', initPlaceholderChar);
                             }
 
-                            controller.$formatters.push(formatter);
+                            controller.$formatters.unshift(formatter);
                             controller.$parsers.unshift(parser);
 
                             function uninitialize() {
