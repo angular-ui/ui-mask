@@ -75,6 +75,14 @@ Whereas, `maskDefinitions` is an object, so any custom object you supply will be
 #### maskDefinitions
 The keys in `maskDefinitions` represent the special tokens/characters used in your mask declaration to delimit acceptable ranges of inputs. For example, we use '9' here to accept any numeric values for a phone number: `ui-mask="(999) 999-9999"`. The values associated with each token are regexen. Each regex defines the ranges of values that will be acceptable as inputs in the position of that token.
 
+#### modelViewValue
+If this is set to true, then the model value bound with `ng-model` will be the same as the `$viewValue` meaning it will contain any static mask characters present in the mask definition. This will not set the model value to a `$viewValue` that is considered invalid.
+
+#### uiMaskPlaceholder
+Allows customizing the mask placeholder when a user has focused the input element and while typing in their value
+
+#### uiMaskPlaceholderChar
+Allows customizing the mask placeholder character. The default mask placeholder is `_`.
 
 ## Development
 
