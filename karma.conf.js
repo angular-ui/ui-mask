@@ -71,7 +71,9 @@ module.exports = function(config) {
 
     config.set({
       sauceLabs: {
-        testName: 'UI Mask CI'
+        testName: 'UI Mask CI',
+        tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER,
+        startConnect: false
       },
       captureTimeout:  120000,
       singleRun: true
