@@ -3,7 +3,7 @@ describe("uiMask", function () {
 
   var formHtml  = "<form name='test'><input name='input' ng-model='x' ui-mask='{{mask}}'></form>";
   var inputHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}' ui-options='options'>";
-  var compileElement, scope, config, timeout;
+  var compileElement, scope, config, timeout, uiMaskConfigProvider;
 
   beforeEach(module("ui.mask"));
   beforeEach(function() {
@@ -21,7 +21,10 @@ describe("uiMask", function () {
           });
         }
       }
-    });
+    })
+    .config(['uiMask.ConfigProvider', function(configProvider) {
+      uiMaskConfigProvider = configProvider;
+    }]);
     module("test");
   });
   beforeEach(inject(function ($rootScope, $compile, uiMaskConfig, $timeout) {
@@ -500,7 +503,7 @@ describe("uiMask", function () {
 
       input.triggerHandler("blur");
       expect(input.attr("placeholder")).toBe("MM/DD/YYYY");
-    })
+    });
 
     it("should allow text input to be the same character as ui-mask-placeholder-char", function() {
       var placeholderHtml = "<input name='input' ng-model='x' ui-mask='(999) 999-9999' placeholder='Phone Number' ui-mask-placeholder-char='5'>",
@@ -673,6 +676,21 @@ describe("uiMask", function () {
       expect(input.val()).toBe("");
       expect(input.attr("placeholder")).toBe("PLACEHOLDER");
     });
+  });
+
+  describe("Configuration Provider", function() {
+    it("should return default values", inject(function($injector) {
+      var service = $injector.invoke(uiMaskConfigProvider.$get);
+      expect(service.clearOnBlur).toEqual(true);
+      expect(service.clearOnBlurPlaceholder).toEqual(false);
+    }));
+
+    it("should merge default values with configured values", inject(function($injector) {
+      uiMaskConfigProvider.clearOnBlur(false);
+      var service = $injector.invoke(uiMaskConfigProvider.$get);
+      expect(service.clearOnBlur).toEqual(false);
+      expect(service.clearOnBlurPlaceholder).toEqual(false);
+    }));
   });
 
 });
