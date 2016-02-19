@@ -13,6 +13,7 @@ describe('user input', function() {
 
     definitionElement.clear();
     definitionElement.sendKeys('QT**BC**');
+    maskedElement.click();
     maskedElement.sendKeys('1234');
     expect(maskedElement.getAttribute('value')).toBe('QT12BC34');
     maskedElement.sendKeys(protractor.Key.BACK_SPACE);
