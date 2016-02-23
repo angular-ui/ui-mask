@@ -326,7 +326,7 @@ angular.module('ui.mask', [])
                                 var maskPlaceholderChars = maskPlaceholder.split(''),
                                         maskPlaceholderCopy, components;
 
-                                //maskCaretMap can have bad values if the input has the ui-mask attribute implemented as an obversable property, i.e. the demo page
+                                //maskCaretMap can have bad values if the input has the ui-mask attribute implemented as an obversable property, e.g. the demo page
                                 if (maskCaretMap && !isNaN(maskCaretMap[0])) {
                                     //Instead of trying to manipulate the RegEx based on the placeholder characters
                                     //we can simply replace the placeholder characters based on the already built
@@ -337,13 +337,13 @@ angular.module('ui.mask', [])
                                     });
                                 }
                                 maskPlaceholderCopy = maskPlaceholderChars.join('');
-                                components = maskPlaceholderCopy.replace(/[_]+/g, '_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
+                                components = maskPlaceholderCopy.replace(/[_]+/g, '_').split('_');
                                 components = components.filter(function(s) {
                                     return s !== '';
                                 });
 
                                 // need a string search offset in cases where the mask contains multiple identical components
-                                // I.E. a mask of 99.99.99-999.99
+                                // E.g., a mask of 99.99.99-999.99
                                 var offset = 0;
                                 return components.map(function(c) {
                                     var componentPosition = maskPlaceholderCopy.indexOf(c, offset);
