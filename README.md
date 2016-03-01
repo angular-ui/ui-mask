@@ -95,6 +95,14 @@ Allows customizing the mask placeholder when a user has focused the input elemen
 #### uiMaskPlaceholderChar
 Allows customizing the mask placeholder character. The default mask placeholder is `_`.
 
+## Testing
+
+Most of the testing is done using Karma to run the tests and SauceLabs to provide the different browser environments to test against.
+
+Mobile testing and debugging uses BrowserStack for its abilities to remotely debug mobile devices from a browser.
+
+[<img alt="BrowserStack" src="logos/browser-stack.png" height="53" width="250" />](https://www.browserstack.com)
+
 ## Development
 
 We use Karma and jshint to ensure the quality of the code.  The easiest way to run these checks is to use gulp:
