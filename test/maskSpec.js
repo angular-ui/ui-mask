@@ -584,6 +584,17 @@ describe("uiMask", function () {
       input.triggerHandler("blur");
       expect(input.val()).toBe("f111");
     });
+
+    it("should accept new addDefaultPlaceholder value set per element", function() {
+        scope.options = {
+            addDefaultPlaceholder: false
+        };
+
+        var input = compileElement(inputHtml);
+        scope.$apply("x = ''");
+        scope.$apply("mask = '@999'");
+        expect(input.attr('placeholder')).toBe(undefined);
+    });
   });
 
   describe("blurring", function () {
@@ -683,13 +694,16 @@ describe("uiMask", function () {
       var service = $injector.invoke(uiMaskConfigProvider.$get);
       expect(service.clearOnBlur).toEqual(true);
       expect(service.clearOnBlurPlaceholder).toEqual(false);
+      expect(service.addDefaultPlaceholder).toEqual(true);
     }));
 
     it("should merge default values with configured values", inject(function($injector) {
       uiMaskConfigProvider.clearOnBlur(false);
+      uiMaskConfigProvider.addDefaultPlaceholder(false);
       var service = $injector.invoke(uiMaskConfigProvider.$get);
       expect(service.clearOnBlur).toEqual(false);
       expect(service.clearOnBlurPlaceholder).toEqual(false);
+      expect(service.addDefaultPlaceholder).toEqual(false);
     }));
   });
 
