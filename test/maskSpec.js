@@ -676,6 +676,16 @@ describe("uiMask", function () {
       expect(input.val()).toBe("");
       expect(input.attr("placeholder")).toBe("PLACEHOLDER");
     });
+
+    it("should not preserve $invalid on blur event", function() {
+      var form  = compileElement(formHtml);
+      var input = form.find("input");
+      scope.$apply("x = ''");
+      scope.$apply("mask = '(A) * 9'");
+      input.val("a").triggerHandler("input");
+      input.triggerHandler("blur");
+      expect(scope.test.input.$invalid).toBe(false);
+    });
   });
 
   describe("Configuration Provider", function() {
