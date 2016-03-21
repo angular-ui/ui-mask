@@ -96,6 +96,8 @@ Allows customizing the mask placeholder when a user has focused the input elemen
 #### uiMaskPlaceholderChar
 Allows customizing the mask placeholder character. The default mask placeholder is `_`.
 
+Set this attribute to the word `space` if you want the placeholder character to be whitespace.
+
 #### addDefaultPlaceholder
 The default placeholder is constructed from the `ui-mask` definition so a mask of `999-9999` would have a default placeholder of `___-____`; unless you have overridden the default placeholder character.
 
