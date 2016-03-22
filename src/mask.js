@@ -16,6 +16,9 @@ angular.module('ui.mask', [])
         .provider('uiMask.Config', function() {
             var options = {};
 
+            this.maskDefinitions = function(maskDefinitions) {
+                return options.maskDefinitions = maskDefinitions;
+            };
             this.clearOnBlur = function(clearOnBlur) {
                 return options.clearOnBlur = clearOnBlur;
             };
@@ -30,9 +33,12 @@ angular.module('ui.mask', [])
             };
             this.$get = ['uiMaskConfig', function(uiMaskConfig) {
                 var tempOptions = uiMaskConfig;
-                for(var prop in options)
-                {
-                    tempOptions[prop] = options[prop];
+                for(var prop in options) {
+                    if (angular.isObject(options[prop]) && !angular.isArray(options[prop])) {
+                        angular.extend(tempOptions[prop], options[prop]);
+                    } else {
+                        tempOptions[prop] = options[prop];
+                    }
                 }
 
                 return tempOptions;

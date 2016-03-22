@@ -702,17 +702,24 @@ describe("uiMask", function () {
   describe("Configuration Provider", function() {
     it("should return default values", inject(function($injector) {
       var service = $injector.invoke(uiMaskConfigProvider.$get);
+      expect(service.maskDefinitions).toEqual({'9': /\d/, 'A': /[a-zA-Z]/, '*': /[a-zA-Z0-9]/ });
       expect(service.clearOnBlur).toEqual(true);
       expect(service.clearOnBlurPlaceholder).toEqual(false);
+      expect(service.eventsToHandle).toEqual(['input', 'keyup', 'click', 'focus']);
       expect(service.addDefaultPlaceholder).toEqual(true);
     }));
 
     it("should merge default values with configured values", inject(function($injector) {
+      uiMaskConfigProvider.maskDefinitions({'7': /\d/});
       uiMaskConfigProvider.clearOnBlur(false);
+      uiMaskConfigProvider.clearOnBlurPlaceholder(true);
+      uiMaskConfigProvider.eventsToHandle(['input', 'keyup']);
       uiMaskConfigProvider.addDefaultPlaceholder(false);
       var service = $injector.invoke(uiMaskConfigProvider.$get);
+      expect(service.maskDefinitions).toEqual({'7': /\d/, '9': /\d/, 'A': /[a-zA-Z]/, '*': /[a-zA-Z0-9]/ });
       expect(service.clearOnBlur).toEqual(false);
-      expect(service.clearOnBlurPlaceholder).toEqual(false);
+      expect(service.clearOnBlurPlaceholder).toEqual(true);
+      expect(service.eventsToHandle).toEqual(['input', 'keyup']);
       expect(service.addDefaultPlaceholder).toEqual(false);
     }));
   });
