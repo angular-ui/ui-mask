@@ -10,6 +10,7 @@ angular.module('ui.mask', [])
             },
             clearOnBlur: true,
             clearOnBlurPlaceholder: false,
+            escChar: '\\',
             eventsToHandle: ['input', 'keyup', 'click', 'focus'],
             addDefaultPlaceholder: true
         })
@@ -373,9 +374,17 @@ angular.module('ui.mask', [])
                                             numberOfOptionalCharacters = 0,
                                             splitMask = mask.split('');
 
+                                    var inEscape = false;
                                     angular.forEach(splitMask, function(chr, i) {
-                                        if (linkOptions.maskDefinitions[chr]) {
-
+                                        if (inEscape) {
+                                            inEscape = false;
+                                            maskPlaceholder += chr;
+                                            characterCount++;
+                                        }
+                                        else if (linkOptions.escChar === chr) {
+                                            inEscape = true;
+                                        }
+                                        else if (linkOptions.maskDefinitions[chr]) {
                                             maskCaretMap.push(characterCount);
 
                                             maskPlaceholder += getPlaceholderChar(i - numberOfOptionalCharacters);
