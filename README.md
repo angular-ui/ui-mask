@@ -66,12 +66,15 @@ Inside of `ui-options`, you can customize these four properties:
 * `clearOnBlurPlaceholder` - default: `false`,
 * `eventsToHandle` - default: `['input', 'keyup', 'click', 'focus']`
 * `addDefaultPlaceholder` - default: `true`
+* `escChar` - default: `'\\'`
 
 When customizing `eventsToHandle`, `clearOnBlur`, or `addDefaultPlaceholder`, the value you supply will replace the default. To customize `eventsToHandle`, be sure to replace the entire array.
 
 Whereas, `maskDefinitions` is an object, so any custom object you supply will be merged together with the defaults using `angular.extend()`. This allows you to override the defaults selectively, if you wish.
 
 When setting `clearOnBlurPlaceholder` to `true`, it will show the placeholder text instead of the empty mask. It requires the `ui-mask-placeholder` attribute to be set on the input to display properly.
+
+If the `escChar` (\\ by default) is encountered in a mask, the next character will be treated as a literal and not a mask definition key.  To disable the `escChar` feature completely, set `escChar` to `null`.
 
 #### Global customization
 In addition to customizing behaviors for a specific element, you can also customize the behaviors globally. To do this, simply use the `uiMaskConfig` provider in your app configuration. Example:

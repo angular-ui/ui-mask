@@ -379,6 +379,98 @@ describe("uiMask", function () {
     });
   });
 
+  describe("escChar", function () {
+    it("should escape default mask definitions", function() {
+      var escapeHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}'>",
+          input  = compileElement(escapeHtml);
+      scope.$apply(function() {
+        scope.x = '';
+        scope.mask = '\\A\\9\\*\\?*';
+      });
+      expect(input.attr("placeholder")).toBe("A9*?_");
+      input.val("a").triggerHandler("input");
+      expect(input.val()).toBe("A9*?a");
+    });
+    it("should not confuse entered values with escaped values", function() {
+      var escapeHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}'>",
+          input  = compileElement(escapeHtml);
+      scope.$apply(function() {
+        scope.x = '';
+        scope.mask = '\\A\\9\\*\\?****';
+      });
+      expect(input.attr("placeholder")).toBe("A9*?____");
+      input.val("A9A9").triggerHandler("input");
+      expect(input.val()).toBe("A9*?A9A9");
+    });
+    it("should escape custom mask definitions", function() {
+      scope.options = {
+        maskDefinitions: {
+          "Q": /[Qq]/
+        }
+      };
+      var input  = compileElement(inputHtml);
+      scope.$apply(function() {
+        scope.x = '';
+        scope.mask = '\\QQ';
+      });
+      expect(input.attr("placeholder")).toBe("Q_");
+      input.val("q").triggerHandler("input");
+      expect(input.val()).toBe("Qq");
+    });
+    it("should escape normal characters", function() {
+      var input  = compileElement(inputHtml);
+      scope.$apply(function() {
+        scope.x = '';
+        scope.mask = '\\W*';
+      });
+      expect(input.attr("placeholder")).toBe("W_");
+      input.val("q").triggerHandler("input");
+      expect(input.val()).toBe("Wq");
+    });
+    it("should escape itself", function() {
+      var escapeHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}'>",
+          input  = compileElement(escapeHtml);
+      scope.$apply(function() {
+        scope.x = '';
+        scope.mask = '\\\\*';
+      });
+      scope.$apply("x = ''");
+      scope.$apply("mask = '\\\\\\\\*'");
+      expect(input.attr("placeholder")).toBe("\\_");
+      input.val("a").triggerHandler("input");
+      expect(input.val()).toBe("\\a");
+    });
+    it("should change the escape character", function() {
+      scope.options = {
+        escChar: '!',
+        maskDefinitions: {
+          "Q": /[Qq]/
+        }
+      };
+      var input  = compileElement(inputHtml);
+      scope.$apply(function() {
+        scope.x = '';
+        scope.mask = '\\!A!9!*!Q!!!W*';
+      });
+      expect(input.attr("placeholder")).toBe("\\A9*Q!W_");
+      input.val("a").triggerHandler("input");
+      expect(input.val()).toBe("\\A9*Q!Wa");
+    });
+    it("should use null to mean no escape character", function() {
+      scope.options = {
+        escChar: null,
+      };
+      var input  = compileElement(inputHtml);
+      scope.$apply(function() {
+        scope.x = '';
+        scope.mask = '\\!A!9!*!!*';
+      });
+      expect(input.attr("placeholder")).toBe("\\!_!_!_!!_");
+      input.val("a").triggerHandler("input");
+      expect(input.val()).toBe("\\!a!_!_!!_");
+    });
+  });
+
   describe("placeholders", function () {
     it("should have default placeholder functionality", function() {
       var input = compileElement(inputHtml);
