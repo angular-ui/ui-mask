@@ -55,7 +55,7 @@ angular.module('myApp', [uiMask, ...]);
 ### Customizing
 You can customize several behaviors of ui-mask by taking advantage of the `ui-options` object. Declare `ui-options` as an additional attribute on the same element where you declare `ui-mask`.
 
-Inside of `ui-options`, you can customize these four properties:
+Inside of `ui-options`, you can customize these five properties:
 
 * `maskDefinitions` - default: `{
                 '9': /\d/,
