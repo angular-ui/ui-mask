@@ -12,7 +12,8 @@ angular.module('ui.mask', [])
             clearOnBlurPlaceholder: false,
             escChar: '\\',
             eventsToHandle: ['input', 'keyup', 'click', 'focus'],
-            addDefaultPlaceholder: true
+            addDefaultPlaceholder: true,
+            allowInvalidValue: false
         })
         .provider('uiMask.Config', function() {
             var options = {};
@@ -58,7 +59,7 @@ angular.module('ui.mask', [])
                     require: 'ngModel',
                     restrict: 'A',
                     compile: function uiMaskCompilingFunction() {
-                        var options = maskConfig;
+                        var options = angular.copy(maskConfig);
 
                         return function uiMaskLinkingFunction(scope, iElement, iAttrs, controller) {
                             var maskProcessed = false, eventsBound = false,
@@ -161,12 +162,8 @@ angular.module('ui.mask', [])
                                 controller.$viewValue = value.length ? maskValue(value) : '';
                                 controller.$setValidity('mask', isValid);
 
-                                if (modelViewValue) value = controller.$viewValue;
-                                if (!value.length) return undefined;
                                 if (isValid || linkOptions.allowInvalidValue) {
-                                    return value;
-                                } else {
-                                    return undefined;
+                                    return modelViewValue ? controller.$viewValue : value;
                                 }
                             }
 

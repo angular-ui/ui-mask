@@ -121,7 +121,7 @@ gulp.task('karma-sauce', ['build', 'start-sauce-connect'], function(callback) {
       karma: Server,
       customLaunchers: customLaunchers
   }, function(code) {
-      callback();
+      callback(code);
   });
 });
 
