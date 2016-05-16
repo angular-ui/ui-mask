@@ -280,6 +280,22 @@ describe("uiMask", function () {
         input.val("811").triggerHandler("input");
         expect(input.val()).toBe("81.1_.__-___.__");
     });
+
+    it("should set the model value properly even if it's not full", function() {
+      var input1 = compileElement('<input ui-mask="{{mask}}" ng-model="x" allow-invalid-value/>');
+      var input2 = compileElement('<input ui-mask="{{mask}}" ng-model="x" ui-options="{allowInvalidValue: true}"/>');
+      scope.$apply("mask = '9999'");
+
+      input1.val('11').triggerHandler("change");
+      expect(scope.x).toBe("11");
+
+      input2.val('22').triggerHandler("change");
+      expect(scope.x).toBe("22");
+
+      scope.$apply("x = '33'");
+      expect(input1.val()).toBe("33__");
+      expect(input2.val()).toBe("33__");
+    });
   });
 
   describe("verify change is called", function () {
