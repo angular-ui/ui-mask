@@ -310,9 +310,9 @@ describe("uiMask", function () {
         doneCount++;
         done();
       });
-      input.val("aa").triggerHandler("input");
+      input.val("aa").triggerHandler("change");
       input.triggerHandler("blur");
-      input.val("aa").triggerHandler("input");
+      input.val("aa").triggerHandler("change");
       input.triggerHandler("blur");
     });
 
