@@ -707,6 +707,9 @@ angular.module('ui.mask', [])
                                 if (input.selectionStart !== undefined) {
                                     return (input.selectionEnd - input.selectionStart);
                                 }
+                                if (window.getSelection) {
+                                    return (window.getSelection().toString().length);
+                                }
                                 if (document.selection) {
                                     return (document.selection.createRange().text.length);
                                 }
