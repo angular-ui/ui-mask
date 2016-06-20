@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.8.5 - 2016-06-10T16:53:59.510Z
+ * Version: 1.8.6 - 2016-06-20T21:05:48.730Z
  * License: MIT
  */
 
@@ -716,6 +716,9 @@ angular.module('ui.mask', [])
                                     return 0;
                                 if (input.selectionStart !== undefined) {
                                     return (input.selectionEnd - input.selectionStart);
+                                }
+                                if (window.getSelection) {
+                                    return (window.getSelection().toString().length);
                                 }
                                 if (document.selection) {
                                     return (document.selection.createRange().text.length);
