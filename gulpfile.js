@@ -115,7 +115,7 @@ gulp.task('karma-sauce', ['build', 'start-sauce-connect'], function(callback) {
       'internet explorer': '10..11'
     },
     'Windows 10': {
-      'internet explorer': '13'
+      'MicrosoftEdge': '13'
     },
     'OS X 10.10': {
       'chrome': '43..44',
