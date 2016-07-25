@@ -112,7 +112,10 @@ function closeSauceConnect() {
 gulp.task('karma-sauce', ['build', 'start-sauce-connect'], function(callback) {
   var customLaunchers = geSaLaKaCuLa({
     'Windows 7': {
-      'internet explorer': '9..11',
+      'internet explorer': '10..11'
+    },
+    'Windows 10': {
+      'internet explorer': '13'
     },
     'OS X 10.10': {
       'chrome': '43..44',
