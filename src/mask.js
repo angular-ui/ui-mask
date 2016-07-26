@@ -511,23 +511,30 @@ angular.module('ui.mask', [])
                             }
 
                             function keydownHandler(e) {
-                                /*jshint validthis: true */
-                                var isKeyBackspace = e.which === 8,
-                                    caretPos = getCaretPosition(this) - 1 || 0; //value in keydown is pre change so bump caret position back to simulate post change
-
-                                if (isKeyBackspace) {
-                                    while(caretPos >= 0) {
-                                        if (isValidCaretPosition(caretPos)) {
-                                            //re-adjust the caret position.
-                                            //Increment to account for the initial decrement to simulate post change caret position
-                                            setCaretPosition(this, caretPos + 1);
-                                            break;
-                                        }
-                                        caretPos--;
-                                    }
-                                    preventBackspace = caretPos === -1;
-                                }
-                            }
+		              	/*jshint validthis: true */
+				var isKeyBackspace = e.which === 8,
+				caretPos = getCaretPosition(this) - 1 || 0, //value in keydown is pre change so bump caret position back to simulate post change
+				isCtrlZ = e.which === 90 && e.ctrlKey; //ctrl+z pressed
+		
+				if (isKeyBackspace) {
+					while(caretPos >= 0) {
+						if (isValidCaretPosition(caretPos)) {
+						//re-adjust the caret position.
+						//Increment to account for the initial decrement to simulate post change caret position
+						setCaretPosition(this, caretPos + 1);
+						break;
+						}
+					caretPos--;
+					}
+				preventBackspace = caretPos === -1;
+				}
+				
+				if (isCtrlZ) {
+					// prevent IE bug - value should be returned to initial state
+					iElement.val('');
+					e.preventDefault();
+				}
+			}
 
                             function eventHandler(e) {
                                 /*jshint validthis: true */
