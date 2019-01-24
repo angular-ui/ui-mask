@@ -2,6 +2,9 @@
 
 Apply a mask on an input field so the user can only type pre-determined pattern.
 
+# PROJECT NEEDS NEW MAINTAINER!
+**Please reach out to [Dean Sofer / ProLoser](https://github.com/proloser) if you're interested in taking over!!!**
+
 ## Requirements
 
 - AngularJS
